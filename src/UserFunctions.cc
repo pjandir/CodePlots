@@ -71,44 +71,6 @@ std::vector<ToPlot> makeSearchBinTPs(ToPlot tp) {
 
 }
 
-/*
-int findSearchBin(double ht, double mht, int njets, int nbjets) {
-
-  const int nbin_njet = 3 ; 
-  const int nbin_nb   = 4 ; 
-  const int nbin_mht  = 3 ; 
-  const int nbin_ht   = 3 ; 
-  const int nbin_htmht = 6;
-  float sb_njet[nbin_njet+1] = {  3.5, 6.5, 8.5, 99. } ; 
-  float sb_nb  [nbin_nb  +1] = { -0.5, 0.5, 1.5, 2.5, 99. } ; 
-  float sb_mht[nbin_mht+1] = { 200., 500.,  750., 99999. } ; 
-  float sb_ht [nbin_ht +1] = { 500., 800., 1200., 99999. } ; 
-  float sb_mhtht_mhtlow [nbin_htmht] = { 200., 200., 200., 500., 500.,   750. } ; 
-  float sb_mhtht_mhthigh[nbin_htmht] = { 500., 500., 500., 750., 750., 99999. } ; 
-  float sb_mhtht_htlow  [nbin_htmht] = { 500.,  800.,  1200.,  500.,  1200.,   800. } ; 
-  float sb_mhtht_hthigh [nbin_htmht] = { 800., 1200., 99999., 1200., 99999., 99999. } ; 
-
-
-  int bin_number = 0;
-  int nji = 0, nbi = 0, nhtmht = 0;
-  for ( ; nji < nbin_njet; ++nji ) {  
-    if ( njets > sb_njet[nji] && njets <= sb_njet[nji+1] ) break;
-  }
-  for ( ; nbi < nbin_nb; ++nbi ) {  
-    if ( nbjets > sb_nb[nbi] && nbjets <= sb_nb[nbi+1] ) break;
-  }
-  for ( ; nhtmht < nbin_htmht; ++nhtmht ) {  
-    if ( ht > sb_mhtht_htlow[nhtmht] && ht <= sb_mhtht_hthigh[nhtmht] && mht > sb_mhtht_mhtlow[nhtmht] && mht <= sb_mhtht_mhthigh[nhtmht] ) break;
-  }
-  if ( nhtmht >= 6 ) return -1;
-
-  nhtmht+=1;
-  bin_number = nhtmht + nbin_htmht*nbi + nbin_htmht*nbin_nb*nji; 
-  return bin_number;
-
-}
-*/
-
 std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axislimit = true) {
 
   char mht_name [10] = "MHT"   ;
