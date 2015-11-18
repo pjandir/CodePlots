@@ -124,7 +124,6 @@ DrawTree::DrawTree(TString n, int verboselevel)
   //--
   thecan_   = 0;
   theleg_   = 0;
-  ///thelin_   = 0;
   text1_    = 0;
   text2_    = 0;
   text3_    = 0;
@@ -198,7 +197,6 @@ DrawTree::~DrawTree() {
   if ( text3_    != 0 ) delete text3_   ;
   if ( text2_    != 0 ) delete text2_   ;
   if ( text1_    != 0 ) delete text1_   ;
-  ///if ( thelin_   != 0 ) delete thelin_  ;
   if ( theleg_   != 0 ) delete theleg_  ;
   if ( thecan_   != 0 ) delete thecan_  ;
 
@@ -308,7 +306,6 @@ void DrawTree::renewCanvas(TString opt, float lm) {
   thecan_ = new TCanvas("thecan","",canvaswidth_,thecanvasheight);
   thecan_->SetBatch(dobatch_);
 
-  //thecan->cd()->SetRightMargin(0.08);
   thecan_->cd()->SetRightMargin(rightmargin_);
   if ( lm < 0 )
     thecan_->cd()->SetLeftMargin(leftmargin_);
@@ -326,9 +323,6 @@ void DrawTree::renewCanvas(TString opt, float lm) {
     const float padding=1e-5; const float ydivide=0.3;
     thecan_->GetPad(1)->SetPad( padding, ydivide + padding, 1-padding, 1-padding);
     thecan_->GetPad(2)->SetPad( padding, padding, 1-padding, ydivide-padding);
-    //thecan->GetPad(1)->SetTopMargin(0.08); //0.08 0.06
-    //thecan->GetPad(1)->SetRightMargin(0.04); // 0.04
-    //thecan->GetPad(2)->SetRightMargin(0.04); // 0.04
     thecan_->GetPad(1)->SetTopMargin(topmargin_); //0.08 0.06
     thecan_->GetPad(1)->SetRightMargin(rightmargin_); // 0.04
     thecan_->GetPad(2)->SetRightMargin(rightmargin_); // 0.04
@@ -776,7 +770,7 @@ void DrawTree::plot(TString plotopt) {
     for (std::vector<Dataset>::iterator ds = thesigmc_.begin(); ds != thesigmc_.end(); ++ds, ++dsnum) {
       TString s_dsnum = s_varnum; s_dsnum += "_"; s_dsnum += dsnum;
 
-      //Phys14 version has ppb weighting for SMS scans...
+      //signal points have ppb weighting for SMS scans...
       //ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNBins(),var->getXlow(),var->getXhigh());
       ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNBins(),var->getXlow(),var->getXhigh());
 
@@ -928,7 +922,6 @@ void DrawTree::plot(TString plotopt) {
         //if (drawBTagErrors_)  yerr = sqrt( yerr*yerr + pow(getSystematicError(totalsm_,totalsm_btagP1 ,totalsm_btagM1 ,ibin),2));
 
         //propagate back into totalsm. this is relevant for the ratio plot
-
         //if (drawTopPtErrors_||drawBTagErrors_)    totalsm_->SetBinError(ibin,yerr);
 
         //nb: could take a different strategy, and instead of combining the total data and MC errors into one error bar on 
@@ -1044,7 +1037,6 @@ void DrawTree::autoAddDatasets(TString path, TString what, TString back) {
   TString front = "/*";
   TString trig = "";
   
-
 
   //BG MC
   if ( what.Contains("singlet") || what == "" ) {
@@ -1468,6 +1460,7 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
 
 
 //Make a signal sensitivity table
+//Has some custom, specific functions within  
 //
 void DrawTree::sens_table(Dataset bg, TString strcuts, TString strweight, TString strnames, TString strfile, TString strvar, bool dolatex) {
 
@@ -1801,6 +1794,41 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
 
 }
 
+int DrawTree::findSearchBin(double ht, double mht, int njets, int nbjets) {
+
+  const int nbin_njet = 3 ; 
+  const int nbin_nb   = 4 ; 
+  //const int nbin_mht  = 3 ; 
+  //const int nbin_ht   = 3 ; 
+  const int nbin_htmht = 6;
+  float sb_njet[nbin_njet+1] = {  3.5, 6.5, 8.5, 99. } ; 
+  float sb_nb  [nbin_nb  +1] = { -0.5, 0.5, 1.5, 2.5, 99. } ; 
+  //float sb_mht[nbin_mht+1] = { 200., 500.,  750., 99999. } ; 
+  //float sb_ht [nbin_ht +1] = { 500., 800., 1200., 99999. } ; 
+  float sb_mhtht_mhtlow [nbin_htmht] = { 200., 200., 200., 500., 500.,   750. } ; 
+  float sb_mhtht_mhthigh[nbin_htmht] = { 500., 500., 500., 750., 750., 99999. } ; 
+  float sb_mhtht_htlow  [nbin_htmht] = { 500.,  800.,  1200.,  500.,  1200.,   800. } ; 
+  float sb_mhtht_hthigh [nbin_htmht] = { 800., 1200., 99999., 1200., 99999., 99999. } ; 
+
+
+  int bin_number = 0;
+  int nji = 0, nbi = 0, nhtmht = 0;
+  for ( ; nji < nbin_njet; ++nji ) {   
+    if ( njets > sb_njet[nji] && njets <= sb_njet[nji+1] ) break;
+  }
+  for ( ; nbi < nbin_nb; ++nbi ) {   
+    if ( nbjets > sb_nb[nbi] && nbjets <= sb_nb[nbi+1] ) break;
+  }
+  for ( ; nhtmht < nbin_htmht; ++nhtmht ) {   
+    if ( ht > sb_mhtht_htlow[nhtmht] && ht <= sb_mhtht_hthigh[nhtmht] && mht > sb_mhtht_mhtlow[nhtmht] && mht <= sb_mhtht_mhthigh[nhtmht] ) break;
+  }
+  if ( nhtmht >= 6 ) return -1; 
+
+  nhtmht+=1;
+  bin_number = nhtmht + nbin_htmht*nbi + nbin_htmht*nbin_nb*nji; 
+  return bin_number;
+
+}
 
 double DrawTree::calcTotal(TChain * tree, int flag) {
 
@@ -1893,7 +1921,6 @@ double DrawTree::calcTotal(TChain * tree, int flag) {
    Long64_t nentries = tree->GetEntries();
    Long64_t ientry = 0;
 
-   ///cout << "Calc total " << nentries << endl;
    //nentries = 100;
    for (Long64_t jentry=0; jentry<nentries;++jentry) {
      tree->GetEntry(jentry);
@@ -1921,31 +1948,12 @@ double DrawTree::calcTotal(TChain * tree, int flag) {
          ++dp;
        }
      }
-     //cout << c << " " << RJetDeltaPhi->size() << endl;
      if ( RJetDeltaPhi->size() != c && RJetDeltaPhi->size() > 8 ) {
        total = -1;
        cout << c << " " << RJetDeltaPhi->size() << endl;
        break;
      }
-     //i = 0;
-     //for ( std::vector<double>::iterator itr = dpvec.begin(); itr != dpvec.end(); ++itr, ++i ) {
-     //  if ( !AreEqualAbs(*itr,DeltaPhi1) && i == 0 ) cout << *itr << " " << DeltaPhi1 << " " << i << endl;
-     //  if ( !AreEqualAbs(*itr,DeltaPhi2) && i == 1 ) cout << *itr << " " << DeltaPhi2 << " " << i <<  endl;
-     //  if ( !AreEqualAbs(*itr,DeltaPhi3) && i == 2 ) cout << *itr << " " << DeltaPhi3 << " " << i << endl;
-     //}
-     ///cout << " " << DeltaPhi1 << " " << DeltaPhi2 << " " << DeltaPhi3 << endl;
-       /*
-$$RJetDeltaPhi[0]>0.5&&RJetDeltaPhi[1]>0.5&&RJetDeltaPhi[2]>0.3
-$$RJetDeltaPhi[0]>0.5&&RJetDeltaPhi[1]>0.5&&RJetDeltaPhi[2]>0.5
-$$RJetDeltaPhi[0]>0.5&&RJetDeltaPhi[1]>0.5&&RJetDeltaPhi[2]>0.3&&RJetDeltaPhi[3]>0.3
-$$RJetDeltaPhi[0]>0.5&&RJetDeltaPhi[1]>0.5&&RJetDeltaPhi[2]>0.5&&RJetDeltaPhi[3]>0.3
-$$RJetDeltaPhi[0]>0.5&&RJetDeltaPhi[1]>0.5&&RJetDeltaPhi[2]>0.5&&RJetDeltaPhi[3]>0.5
-$$RJetDeltaPhi[0]>0.45&&RJetDeltaPhi[1]>0.45&&RJetDeltaPhi[2]>0.45&&RJetDeltaPhi[3]>0.45
-$$RJetDeltaPhi[0]>0.4&&RJetDeltaPhi[1]>0.4&&RJetDeltaPhi[2]>0.4&&RJetDeltaPhi[3]>0.4
-$$RJetDeltaPhi[0]>0.35&&RJetDeltaPhi[1]>0.35&&RJetDeltaPhi[2]>0.35&&RJetDeltaPhi[3]>0.35
-$$RJetDeltaPhi[0]>0.3&&RJetDeltaPhi[1]>0.3&&RJetDeltaPhi[2]>0.3&&RJetDeltaPhi[3]>0.3
-$$RJetDeltaPhi[0]>0.25&&RJetDeltaPhi[1]>0.25&&RJetDeltaPhi[2]>0.25&&RJetDeltaPhi[3]>0.25"     
-*/
+
      if ( flag == 1 ) {
        pass = dpvec[0]>0.5 && dpvec[1]>0.5 && dpvec[2]>0.3 ; 
        ////pass = RJetDeltaPhi->at(0)>0.5 && RJetDeltaPhi->at(1)>0.5 && RJetDeltaPhi->at(2)>0.3 ; 
@@ -2185,39 +2193,4 @@ double DrawTree::calcTotal2(TChain * tree, TString name,  int flag) {
 
 }
 
-int DrawTree::findSearchBin(double ht, double mht, int njets, int nbjets) {
-
-  const int nbin_njet = 3 ; 
-  const int nbin_nb   = 4 ; 
-  //const int nbin_mht  = 3 ; 
-  //const int nbin_ht   = 3 ; 
-  const int nbin_htmht = 6;
-  float sb_njet[nbin_njet+1] = {  3.5, 6.5, 8.5, 99. } ; 
-  float sb_nb  [nbin_nb  +1] = { -0.5, 0.5, 1.5, 2.5, 99. } ; 
-  //float sb_mht[nbin_mht+1] = { 200., 500.,  750., 99999. } ; 
-  //float sb_ht [nbin_ht +1] = { 500., 800., 1200., 99999. } ; 
-  float sb_mhtht_mhtlow [nbin_htmht] = { 200., 200., 200., 500., 500.,   750. } ; 
-  float sb_mhtht_mhthigh[nbin_htmht] = { 500., 500., 500., 750., 750., 99999. } ; 
-  float sb_mhtht_htlow  [nbin_htmht] = { 500.,  800.,  1200.,  500.,  1200.,   800. } ; 
-  float sb_mhtht_hthigh [nbin_htmht] = { 800., 1200., 99999., 1200., 99999., 99999. } ; 
-
-
-  int bin_number = 0;
-  int nji = 0, nbi = 0, nhtmht = 0;
-  for ( ; nji < nbin_njet; ++nji ) {   
-    if ( njets > sb_njet[nji] && njets <= sb_njet[nji+1] ) break;
-  }
-  for ( ; nbi < nbin_nb; ++nbi ) {   
-    if ( nbjets > sb_nb[nbi] && nbjets <= sb_nb[nbi+1] ) break;
-  }
-  for ( ; nhtmht < nbin_htmht; ++nhtmht ) {   
-    if ( ht > sb_mhtht_htlow[nhtmht] && ht <= sb_mhtht_hthigh[nhtmht] && mht > sb_mhtht_mhtlow[nhtmht] && mht <= sb_mhtht_mhthigh[nhtmht] ) break;
-  }
-  if ( nhtmht >= 6 ) return -1; 
-
-  nhtmht+=1;
-  bin_number = nhtmht + nbin_htmht*nbi + nbin_htmht*nbin_nb*nji; 
-  return bin_number;
-
-}
 
