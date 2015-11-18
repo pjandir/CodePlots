@@ -23,19 +23,22 @@ void Example() {
   dt->setDrawratio(true);
 
   //Custom function to add all datasets you want
-  dt->autoAddDatasets("/data/strange2/pjandir/TreeMaker-Trees/LPC-CentralProdSkim-V4/","fullqcd ttbar wjets singlet zinv data","*.root");
+  dt->autoAddDatasets("path/to/the/root/files","fullqcd ttbar wjets singlet zinv data","*.root");
 
   //Add 'ToPlot' which sets the selection, plotted variable, plot dimensions 
+  //This will plot HT and MHT variables
   dt->addVar(ToPlot("MHT>200&&Leptons==0&&BTags>=0&&NJets>3&&HT>500&&JetID>0","HT","","","",50,500,2500));
   dt->addVar(ToPlot("MHT>200&&Leptons==0&&BTags>=0&&NJets>3&&HT>500&&JetID>0","MHT","","","",50,200,2200));
 
 
-  //Function plots N-1 style in first argument
+  //Function plots N-1 style in first argument - see function for full details
   //dt->Nminus1plots(ToPlot("HT>500$$MHT>200$$(Leptons==0)$$BTags>=0$$NJets>3$$MinDeltaPhi>0.5","HT","","","(isoPionTracks+isoElectronTracks+isoMuonTracks==0)&&(JetID>0)",40,0,4000),"$$");
    
-  //Makes cutflow table with various options 
+  //Makes cutflow table with various options - see function for full details
   //dt->cutflow("1$$HT>500$$MHT>200$$(Leptons==0)$$NJets>3","BTags==0$$BTags==1$$BTags>=2","","No Cut$$HT>500$$MHT>200$$Lepton veto$$NJet>3$$NBjet==0$$NBjet==1$$NBjet>=2","");
 
+  //Plot two sets of plots, with and without log y-scale
+  dt->plot();
   dt->setLogy(false);
   dt->plot();
 
