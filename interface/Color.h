@@ -36,9 +36,10 @@ public:
 
   static std::vector<Color> init();
   static void plotTheColors();
-  TColor * convert() const { return new TColor(id_,r_,g_,b_); }
-  TColor convert2() const { return TColor(id_,r_,g_,b_); }
+  TColor * convert () const { return new TColor(id_,r_,g_,b_); }
+  TColor   convert2() const { return     TColor(id_,r_,g_,b_); }
 
 }; // class Color 
 
 #endif
+

@@ -2,18 +2,23 @@
 #include "../interface/DrawTree.h"
 #include "../src/UserFunctions.cc"
 
+//
+// Example function to show how the package works
+// There are four objects: Color, ToPlot, Dataset, and DrawTree
+//   - Color is simply a holder for custom colors   
+//     - This statement will show them: Color::plotTheColors();
+//   - ToPlot holds the plotted variable, selection, plot dimensions at its core
+//   - Dataset holds an individual physics dataset with
+//   - DrawTree is the driver of it all, incorporating the above three
+//  
+//  
+
 void Example() {
   
-//
-// To see all the custom colors:  
-// Color::plotTheColors();
-//
-
-
   //The object that draws it all
   DrawTree * dt = new DrawTree("tree",vError);
 
-  //Set the options
+  //Set the various options
   dt->setLogy(true);
   dt->setDrawmcerr(true);
   dt->setDostack(true);
@@ -23,9 +28,10 @@ void Example() {
   dt->setDrawratio(true);
 
   //Custom function to add all datasets you want
+  //See function to see how to add datasets to the DrawTree object by hand
   dt->autoAddDatasets("path/to/the/root/files","fullqcd ttbar wjets singlet zinv data","*.root");
 
-  //Add 'ToPlot' which sets the selection, plotted variable, plot dimensions 
+  //Add (one or more) 'ToPlot' which sets the selection, plotted variable, plot dimensions 
   //This will plot HT and MHT variables
   dt->addVar(ToPlot("MHT>200&&Leptons==0&&BTags>=0&&NJets>3&&HT>500&&JetID>0","HT","","","",50,500,2500));
   dt->addVar(ToPlot("MHT>200&&Leptons==0&&BTags>=0&&NJets>3&&HT>500&&JetID>0","MHT","","","",50,200,2200));
@@ -42,6 +48,7 @@ void Example() {
   dt->setLogy(false);
   dt->plot();
 
+  //Delete the object, always
   delete dt;
 
   exit(0);
