@@ -11,7 +11,7 @@ void Example() {
 
 
   //The object that draws it all
-  DrawTree * dt = new DrawTree("PreSelection",vError);
+  DrawTree * dt = new DrawTree("tree",vError);
 
   //Set the options
   dt->setLogy(true);
@@ -23,7 +23,7 @@ void Example() {
   dt->setDrawratio(true);
 
   //Custom function to add all datasets you want
-  dt->autoAddDatasets("/data/strange2/Amin/RootFiles/12August2015/withlimit","fullqcd ttbar wjets singlet zinv data","*.root");
+  dt->autoAddDatasets("/data/strange2/pjandir/TreeMaker-Trees/LPC-CentralProdSkim-V4/","fullqcd ttbar wjets singlet zinv data","*.root");
 
   //Add 'ToPlot' which sets the selection, plotted variable, plot dimensions 
   dt->addVar(ToPlot("MHT>200&&Leptons==0&&BTags>=0&&NJets>3&&HT>500&&JetID>0","HT","","","",50,500,2500));

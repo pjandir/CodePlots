@@ -1044,100 +1044,87 @@ void DrawTree::autoAddDatasets(TString path, TString what, TString back) {
   TString front = "/*";
   TString trig = "";
   
+
+
   //BG MC
   if ( what.Contains("singlet") || what == "" ) {
-    Dataset ds(path+front+"ST_t-channel*_*_*"+back+trig,"Singlet",vKingsPurple,1,treename_);
-    ds.addFile(path+front+"ST_tW_*_*"+back);
-    ds.addFile(path+front+"ST_s-channel*_*_*"+back);
+    Dataset ds(path+front+"ST_t-channel_*"+back+trig,"Singlet",vKingsPurple,1,treename_);
+    ds.addFile(path+front+"ST_tW_*"+back);
+    ds.addFile(path+front+"ST_s-channel*"+back);
     thebgmc_.push_back(ds);
   }
   if ( what.Contains("wjets") || what == "" ) {
-    thebgmc_.push_back(Dataset(path+front+"WJetsToLNu_HT-*_13TeV-madgraph*_*"+back+trig,"WJets",vSabercatGreen,1,treename_));
+    thebgmc_.push_back(Dataset(path+front+"WJetsToLNu_HT-*"+back+trig,"WJets",vSabercatGreen,1,treename_));
   }
   if ( what.Contains("zinv") || what.Contains("zjets") || what == "" ) {
-    thebgmc_.push_back(Dataset(path+front+"ZJetsToNuNu_HT-*_13TeV-madgraph*_*"+back+trig,"ZJets",vNinerRed,1,treename_)); //StanfordRed w/lostlep?
+    thebgmc_.push_back(Dataset(path+front+"ZJetsToNuNu_HT-*"+back+trig,"ZJets",vNinerRed,1,treename_)); //StanfordRed w/lostlep?
   }
   if ( what.Contains("fullqcd") || what == "" ) {
-    thebgmc_.push_back(Dataset(path+front+"QCD_Pt_*_Tune*_13TeV_pythia8_*_*"+back+trig,"QCD",vWarriorYellow,1,treename_));
-  }
-  if ( what.Contains("qcdht") || what == "" ) {
-    thebgmc_.push_back(Dataset(path+front+"QCD_HT*13TeV*_*"+back+trig,"QCD",vWarriorYellow,1,treename_));
-  }
-  if ( what.Contains("redqcd") ) {
-    Dataset ds(path+front+"QCD_Pt_80to120_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back+trig,"QCD",vWarriorYellow,1,treename_);
-    ds.addFile(path+front+"QCD_Pt_120to170_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_170to300_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_300to470_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_470to600_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_600to800_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_800to1000_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_1000to1400_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_1400to1800_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_1800to2400_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_2400to3200_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"QCD_Pt_3200toInf_Tune*_13TeV_pythia8_*_MINIAODSIM*"+back);
-    thebgmc_.push_back(ds);
+    thebgmc_.push_back(Dataset(path+front+"QCD_HT-*"+back+trig,"QCD",vWarriorYellow,1,treename_));
   }
   if ( what.Contains("indqcd") ) {
-    Dataset ds1(path+front+"QCD_Pt-300to470_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-300-470",kBlack);
-    Dataset ds2(path+front+"QCD_Pt-470to600_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-470-600",vNinerRed);
-    Dataset ds3(path+front+"QCD_Pt-600to800_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-600-800",vArgentineBlue);
-    Dataset ds4(path+front+"QCD_Pt-800to1000_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-800to1000",vSabercatGreen);
-    Dataset ds5(path+front+"QCD_Pt-1000to1400_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-1000to1400",vGiantOrange);
-    Dataset ds6(path+front+"QCD_Pt-1400to1800_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-1400to1800",vWarriorYellow);
-    Dataset ds7(path+front+"QCD_Pt-1800to2400_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-1800to2400",vKingsPurple);
-    Dataset ds8(path+front+"QCD_Pt-2400to3200_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-2400to3200",vNinerGold);
-    Dataset ds9(path+front+"QCD_Pt-3200_Tune4C_13TeV_pythia8_*_MINIAODSIM*"+back,"QCD-Pt-3200",vKingsSilver);
+    Dataset ds1(path+front+"QCD_HT-200to300*"+back,"QCD-HT-200-300",kBlack);
+    Dataset ds2(path+front+"QCD_HT-300to500*"+back,"QCD-HT-300-500",vNinerRed);
+    Dataset ds3(path+front+"QCD_HT-500to700*"+back,"QCD-HT-500-700",vArgentineBlue);
+    Dataset ds4(path+front+"QCD_HT-700to1000*"+back,"QCD-HT-700to1000",vSabercatGreen);
+    Dataset ds5(path+front+"QCD_HT-1000to1500*"+back,"QCD-HT-1000to1500",vGiantOrange);
+    Dataset ds6(path+front+"QCD_HT-1500to2000*"+back,"QCD-HT-1500to2000",vWarriorYellow);
+    Dataset ds7(path+front+"QCD_HT-2000toInf*"+back,"QCD-HT-2000toInf",vKingsPurple);
     thebgmc_.push_back(ds1); thebgmc_.push_back(ds2); thebgmc_.push_back(ds3);
     thebgmc_.push_back(ds4); thebgmc_.push_back(ds5); thebgmc_.push_back(ds6);
-    thebgmc_.push_back(ds7); thebgmc_.push_back(ds8); thebgmc_.push_back(ds9);
+    thebgmc_.push_back(ds7); 
   }
   if ( what.Contains("ttbar") || what == "" ) {
-    thebgmc_.push_back(Dataset(path+front+"TTJets_Tune*_13TeV-madgraph*_*"+back+trig,"ttbar",vQuakesBlue,1,treename_));
+    thebgmc_.push_back(Dataset(path+front+"TTJets_inc*"+back+trig,"ttbar",vQuakesBlue,1,treename_));
+  }
+  if ( what.Contains("ttbar-full") || what == "" ) {
+    thebgmc_.push_back(Dataset(path+front+"TTJets_FULL*"+back+trig,"ttbar",vQuakesBlue,1,treename_));
   }
   if ( what.Contains("lostlep") ) {
-    Dataset ds(path+front+"TBarToLeptons_*-channel*_*_MINIAODSIM*"+back,"Lost lep",vArgentineBlue);
-    ds.addFile(path+front+"TToLeptons_*-channel-CSA14_Tune4C_13TeV-aMCatNLO-tauola*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"T*_tW-channel-DR_Tune4C_13TeV-CSA14-powheg-tauola*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"TTJets_MSDecaysCKM_central_Tune4C_13TeV-madgraph-tauola*_MINIAODSIM*"+back);
-    ds.addFile(path+front+"WJetsToLNu_HT-*_Tune4C_13TeV-madgraph-tauola*_MINIAODSIM*"+back);
+    Dataset ds(path+front+"ST_t-channel_*"+back+trig,"Lost lep",vArgentineBlue,1,treename_);
+    ds.addFile(path+front+"ST_tW_*"+back);
+    ds.addFile(path+front+"ST_s-channel*"+back);
+    ds.addFile(path+front+"TTJets_inc*"+back);
+    ds.addFile(path+front+"WJetsToLNu_HT-*"+back);
     thebgmc_.push_back(ds);
   }
   if ( what.Contains("totalsm") ) {
-    Dataset ds(path+front+"TTJets_Tune*_13TeV-madgraph*_*"+back+trig,"Total SM",vArgentineBlue,1,treename_);
-    ds.addFile(path+front+"QCD_HT*13TeV*_*"+back);
-    ds.addFile(path+front+"ZJetsToNuNu_HT-*_13TeV-madgraph*_*"+back);
-    ds.addFile(path+front+"WJetsToLNu_HT-*_13TeV-madgraph*_*"+back);
-    ds.addFile(path+front+"ST_t-channel*_*_*"+back);
-    ds.addFile(path+front+"ST_tW_*_*"+back);
-    ds.addFile(path+front+"ST_s-channel*_*_*"+back);
+    Dataset ds(path+front+"ST_t-channel_*"+back+trig,"Total SM",vArgentineBlue,1,treename_);
+    ds.addFile(path+front+"ST_tW_*"+back);
+    ds.addFile(path+front+"ST_s-channel*"+back);
+    ds.addFile(path+front+"TTJets_inc*"+back);
+    ds.addFile(path+front+"WJetsToLNu_HT-*"+back);
+    ds.addFile(path+front+"ZJetsToNuNu_HT-*"+back);
+    ds.addFile(path+front+"QCD_HT-*"+back);
     thebgmc_.push_back(ds);
   }
 
+
   //SIG MC
   if ( what.Contains("t1bbbb") || what == "" ) {
-    Dataset ds1(path+front+"SMS-T1bbbb_mGl*-1000_mLSP-900_Tune*_13TeV-madgraph*_*"+back,"T1bbbbC",vNeonOrange,kFullCircle,3,1.0); 
-    Dataset ds2(path+front+"SMS-T1bbbb_mGl*-1500_mLSP-100_Tune*_13TeV-madgraph*_*"+back,"T1bbbbH",vNeonOrange,kFullCircle,1,1.0); 
+    Dataset ds1(path+front+"T1bbbb_1000_900*"+back,"T1bbbbC",vNeonOrange,kFullCircle,3,1.0); 
+    Dataset ds2(path+front+"T1bbbb_1500_100*"+back,"T1bbbbH",vNeonOrange,kFullCircle,1,1.0); 
     thesigmc_.push_back(ds1);
     thesigmc_.push_back(ds2);
   }
   if ( what.Contains("t1tttt") || what == "" ) {
-    Dataset ds1(path+front+"SMS-T1tttt_mGl*-1200_mLSP-800_Tune*_13TeV-madgraph*_*"+back,"T1ttttC",vNeonGreen,kFullCircle,2,1.0); 
-    Dataset ds2(path+front+"SMS-T1tttt_mGl*-1500_mLSP-100_Tune*_13TeV-madgraph*_*"+back,"T1ttttH",vNeonGreen,kFullCircle,1,1.0); 
+    Dataset ds1(path+front+"T1tttt_1200_800*"+back,"T1ttttC",vNeonGreen,kFullCircle,2,1.0); 
+    Dataset ds2(path+front+"T1tttt_1500_100*"+back,"T1ttttH",vNeonGreen,kFullCircle,1,1.0); 
     thesigmc_.push_back(ds1);
     thesigmc_.push_back(ds2);
   }
   if ( what.Contains("t1qqqq") ) {
-    Dataset ds1(path+front+"SMS-T1qqqq_mGl*-1000_mLSP-800_Tune*_13TeV-madgraph*_*"+back,"T1qqqqC",vNeonPink,kFullCircle,2,1.0); 
-    Dataset ds2(path+front+"SMS-T1qqqq_mGl*-1400_mLSP-100_Tune*_13TeV-madgraph*_*"+back,"T1qqqqH",vNeonPink,kFullCircle,1,1.0); 
+    Dataset ds1(path+front+"T1qqqq_1000_800*"+back,"T1qqqqC",vNeonPink,kFullCircle,2,1.0); 
+    Dataset ds2(path+front+"T1qqqq_1400_100*"+back,"T1qqqqH",vNeonPink,kFullCircle,1,1.0); 
     thesigmc_.push_back(ds1);
     thesigmc_.push_back(ds2);
   }
   
   //DATA
   if ( what.Contains("data") || what == "" ) {
-    Dataset ds(path+front+"Run2015B-PromptReco-v1*HTMHT*.root","Data",kBlack,kFullCircle,1,1,1,treename_); 
-    ds.addFile(path+front+"Run2015B-*Jul*-v1*HTMHT*.root");
+    // The "#PassTrigger" adds that as a specific selection to the dataset
+    Dataset ds(path+front+"HTMHT_re2015C-skim.root#PassTrigger","Data",kBlack,kFullCircle,1,1,1,treename_); 
+    ds.addFile(path+front+"HTMHT_*2015D-skim.root");
     thedata_.push_back(ds);
   }
 
