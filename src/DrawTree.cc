@@ -679,23 +679,23 @@ void DrawTree::plot(TString plotopt) {
 
     thecan_->cd(mainPadIndex);
     if ( useredxtitle_ ) var->makeSimpleXtitle();
-    if ( var->getNBins() <= 0 ) var->assignAxisLimits("X");
+    if ( var->getNxbins() <= 0 ) var->assignAxisLimits("X");
 
     if ( dostack_ ) {
       if ( thestack_ != 0 ) delete thestack_;
       thestack_ = new THStack("thestack","--");
     }
     if ( totalsm_ != 0 ) delete totalsm_;
-    totalsm_ = new TH1D("totalsm","",var->getNBins(),var->getXlow(),var->getXhigh()); 
+    totalsm_ = new TH1D("totalsm","",var->getNxbins(),var->getXlow(),var->getXhigh()); 
     totalsm_->Sumw2();
     if ( drawratio_ ) {
       if ( ratio_ != 0 ) delete ratio_;
-      ratio_ = new TH1D("ratio","",var->getNBins(),var->getXlow(),var->getXhigh());
+      ratio_ = new TH1D("ratio","",var->getNxbins(),var->getXlow(),var->getXhigh());
       ratio_->Sumw2();
       if ( ratiolin_ != 0 ) delete ratiolin_;
       ratiolin_ = new TLine(var->getXlow(), 1, var->getXhigh(), 1);
     }
-    TH1D * hblank = new TH1D("hblank","hblank",var->getNBins(),var->getXlow(),var->getXhigh());
+    TH1D * hblank = new TH1D("hblank","hblank",var->getNxbins(),var->getXlow(),var->getXhigh());
 
     //TODO: Hardcoded values.. could probably open this up to the user 
     totalsm_->SetMarkerColor(vSharkBlue);
@@ -712,7 +712,7 @@ void DrawTree::plot(TString plotopt) {
     for (std::vector<Dataset>::iterator ds = thedata_.begin(); ds != thedata_.end(); ++ds, ++dsnum) {
       TString s_dsnum = s_varnum; s_dsnum += "_"; s_dsnum += dsnum;
 
-      ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNBins(),var->getXlow(),var->getXhigh());
+      ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNxbins(),var->getXlow(),var->getXhigh());
 
       if ( addoverflow_ ) ds->addOverflow();
 
@@ -731,11 +731,11 @@ void DrawTree::plot(TString plotopt) {
 
       TString s_dsnum = s_varnum; s_dsnum += "_"; s_dsnum += dsnum;
       if      ( hasdata_ && !luminorm_ )
-        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNBins(),var->getXlow(),var->getXhigh());
+        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNxbins(),var->getXlow(),var->getXhigh());
       else if ( hasdata_ ||  luminorm_ )
-        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNBins(),var->getXlow(),var->getXhigh());
+        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNxbins(),var->getXlow(),var->getXhigh());
       else
-        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNBins(),var->getXlow(),var->getXhigh());
+        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNxbins(),var->getXlow(),var->getXhigh());
 
       if ( addoverflow_ ) ds->addOverflow();
       if ( hasdata_ && !luminorm_ ) ds->getHist()->Scale(thedata_.begin()->getFullEntries()/ds->getFullEntries());
@@ -771,8 +771,8 @@ void DrawTree::plot(TString plotopt) {
       TString s_dsnum = s_varnum; s_dsnum += "_"; s_dsnum += dsnum;
 
       //signal points have ppb weighting for SMS scans...
-      //ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNBins(),var->getXlow(),var->getXhigh());
-      ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNBins(),var->getXlow(),var->getXhigh());
+      //ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNxbins(),var->getXlow(),var->getXhigh());
+      ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNxbins(),var->getXlow(),var->getXhigh());
 
       if ( addoverflow_ ) ds->addOverflow();
 
@@ -1750,10 +1750,10 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
   ptext_->AddText(text);
   ptext_->AddLine(0.,0.79,1.,0.79);
 
-  TH1D * totalbg = new TH1D("totalbg","",var.getNBins(),var.getXlow(),var.getXhigh());
-  TH1D * justqcd = new TH1D("justqcd","",var.getNBins(),var.getXlow(),var.getXhigh());
-  TH1D * alldata = new TH1D("alldata","",var.getNBins(),var.getXlow(),var.getXhigh());
-  TH1D * h = new TH1D("dummy","",var.getNBins(),var.getXlow(),var.getXhigh());
+  TH1D * totalbg = new TH1D("totalbg","",var.getNxbins(),var.getXlow(),var.getXhigh());
+  TH1D * justqcd = new TH1D("justqcd","",var.getNxbins(),var.getXlow(),var.getXhigh());
+  TH1D * alldata = new TH1D("alldata","",var.getNxbins(),var.getXlow(),var.getXhigh());
+  TH1D * h = new TH1D("dummy","",var.getNxbins(),var.getXlow(),var.getXhigh());
   totalbg->Sumw2();
   justqcd->Sumw2();
   alldata->Sumw2();
@@ -1762,11 +1762,11 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
   for (std::vector<Dataset>::iterator ds = thebgmc_.begin(); ds != thebgmc_.end(); ++ds, ++dsnum) {
     TString s_dsnum = "table"; s_dsnum += "_"; s_dsnum += dsnum;
     if      ( hasdata_ && !luminorm_ )
-      h = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,luminame_,lumi_),var.getNBins(),var.getXlow(),var.getXhigh(),print);
+      h = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,luminame_,lumi_),var.getNxbins(),var.getXlow(),var.getXhigh(),print);
     else if ( hasdata_ ||  luminorm_ )
-      h = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,luminame_,lumi_),var.getNBins(),var.getXlow(),var.getXhigh(),print);
+      h = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,luminame_,lumi_),var.getNxbins(),var.getXlow(),var.getXhigh(),print);
     else 
-      h = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,""),var.getNBins(),var.getXlow(),var.getXhigh(),print);
+      h = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,""),var.getNxbins(),var.getXlow(),var.getXhigh(),print);
 
      if ( ds->getLabel().Contains("QCD") ) justqcd = (TH1D*) h->Clone();
      totalbg->Add(h);
@@ -1776,7 +1776,7 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
   for (std::vector<Dataset>::iterator ds = thedata_.begin(); ds != thedata_.end(); ++ds, ++dsnum) {
     TString s_dsnum = "table"; s_dsnum += "_"; s_dsnum += dsnum;
 
-    alldata = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,""),var.getNBins(),var.getXlow(),var.getXhigh(),print);
+    alldata = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,""),var.getNxbins(),var.getXlow(),var.getXhigh(),print);
   }
 
   GetHistRatio(totalbg, mdpcut, smbg_ratio, smbg_ratioerr, smbg_lo, smbg_loerr, smbg_hi, smbg_hierr);

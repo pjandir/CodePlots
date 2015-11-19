@@ -7,60 +7,60 @@ ToPlot::ToPlot() {
 
 //All the other constructors
 ToPlot::ToPlot(TString s, TString v, TString x, TString y, TString b, TString w, TString e, int n, double xl, double xh, double yl, double yh) 
-: selection_(s), varname_(v), xtitle_(x), ytitle_(y), baseline_(b), weights_(w), extra_(e), nbins_(n), xlo_(xl), xhi_(xh), ylo_(yl), yhi_(yh) 
+: selection_(s), varname_(v), xtitle_(x), ytitle_(y), baseline_(b), weights_(w), extra_(e), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(yl), yhi_(yh) 
 { 
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, TString x, TString y, TString b, TString w, TString e, int n, double xl, double xh) 
-: selection_(s), varname_(v), xtitle_(x), ytitle_(y), baseline_(b), weights_(w), extra_(e), nbins_(n), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0) 
+: selection_(s), varname_(v), xtitle_(x), ytitle_(y), baseline_(b), weights_(w), extra_(e), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0) 
 { 
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, TString x, TString b, TString w, TString e, int n, double xl, double xh) 
-: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(b), weights_(w), extra_(e), nbins_(n), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0) 
+: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(b), weights_(w), extra_(e), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0) 
 { 
   doConstructYtitle();
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, TString x, TString w, TString e, int n, double xl, double xh) 
-: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(""), weights_(w), extra_(e), nbins_(n), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0) 
+: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(""), weights_(w), extra_(e), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0) 
 { 
   doConstructYtitle();
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, TString x, TString y, TString b, int n, double xl, double xh, double yl, double yh) 
-: selection_(s), varname_(v), xtitle_(x), ytitle_(y), baseline_(b), weights_(""), extra_(""), nbins_(n), xlo_(xl), xhi_(xh), ylo_(yl), yhi_(yh) 
+: selection_(s), varname_(v), xtitle_(x), ytitle_(y), baseline_(b), weights_(""), extra_(""), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(yl), yhi_(yh) 
 { 
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, TString x, int n, double xl, double xh, double yl, double yh) 
-: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(""), weights_(""), extra_(""), nbins_(n), xlo_(xl), xhi_(xh), ylo_(yl), yhi_(yh)
+: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(""), weights_(""), extra_(""), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(yl), yhi_(yh)
 { 
   doConstructYtitle();
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, TString x, int n, double xl, double xh) 
-: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(""), weights_(""), extra_(""), nbins_(n), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0)
+: selection_(s), varname_(v), xtitle_(x), ytitle_(""), baseline_(""), weights_(""), extra_(""), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0)
 { 
   doConstructYtitle();
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, int n, double xl, double xh) 
-: selection_(s), varname_(v), xtitle_(v), ytitle_(""), baseline_(""), weights_(""), extra_(""), nbins_(n), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0)
+: selection_(s), varname_(v), xtitle_(v), ytitle_(""), baseline_(""), weights_(""), extra_(""), nxbins_(n), nybins_(0), xlo_(xl), xhi_(xh), ylo_(0), yhi_(0)
 { 
   doConstructYtitle();
   initTexts();
 }
 
 ToPlot::ToPlot(TString s, TString v, TString b, TString w) 
-: selection_(s), varname_(v), xtitle_(v), ytitle_(""), baseline_(b), weights_(w), extra_(""), nbins_(0), xlo_(0), xhi_(0), ylo_(0), yhi_(0)
+: selection_(s), varname_(v), xtitle_(v), ytitle_(""), baseline_(b), weights_(w), extra_(""), nxbins_(0), nybins_(0), xlo_(0), xhi_(0), ylo_(0), yhi_(0)
 { 
   doConstructYtitle();
   initTexts();
@@ -291,7 +291,7 @@ void ToPlot::makeSimpleXtitle() {
 void ToPlot::assignAxisLimits(TString a) {
 
   if ( rt::ContainsMathSym(varname_) ) {
-    nbins_ = 20; xlo_ = -9.5; xhi_ = 10.5; 
+    nxbins_ = 20; xlo_ = -9.5; xhi_ = 10.5; 
     return;
   }
   TString copy = varname_;
@@ -362,14 +362,14 @@ void ToPlot::assignAxisLimits(TString a) {
 
   a.ToLower();
   if      ( a == "x" ) {
-    nbins_ = nb;
+    nxbins_ = nb;
     xlo_   = xl;
     xhi_   = xh;
   }
   else if ( a == "y" ) {
-    nbins_ = nb;
-    xlo_   = xl;
-    xhi_   = xh;
+    nybins_ = nb;
+    ylo_   = xl;
+    yhi_   = xh;
   }
   else {
     myp("Warning: Attempting to assign axis limits to unknown axis. See ToPlot.cc for more info");
@@ -382,7 +382,8 @@ void ToPlot::assignAxisLimits(TString a) {
 
 std::ostream& operator<< (std::ostream & os, const ToPlot & t) {
   char out[2000];
-  sprintf(out,"---ToPlot Object---\n\tSelection: %s\n\tVariable: %s\n\tXtitle: %s\tYtitle: %s\n\tBaseline: %s\n\tWeights: %s\n\tExtra: %s\n\tNbins: %i\tXlow: %f \tXhigh: %f \tYlow: %f \tYhigh: %f \n",t.selection_.Data(),t.varname_.Data(),t.xtitle_.Data(),t.ytitle_.Data(),t.baseline_.Data(),t.weights_.Data(),t.extra_.Data(),t.nbins_,t.xlo_,t.xhi_,t.ylo_,t.yhi_); 
+  sprintf(out,"---ToPlot Object---\n\tSelection: %s\n\tVariable: %s\n\tXtitle: %s\tYtitle: %s\n\tBaseline: %s\n\tWeights: %s\n\tExtra: %s\n\tNXbins: %i\tXlow: %f \tXhigh: %f \tNYbins: %i \tYlow: %f \tYhigh: %f \n"
+             ,t.selection_.Data(),t.varname_.Data(),t.xtitle_.Data(),t.ytitle_.Data(),t.baseline_.Data(),t.weights_.Data(),t.extra_.Data(),t.nxbins_,t.xlo_,t.xhi_,t.nybins_,t.ylo_,t.yhi_); 
   os << out;
   return os; 
 }

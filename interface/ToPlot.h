@@ -17,7 +17,8 @@ private:
   TString extra_;
   TString text_;
   TString text2_;
-  int nbins_;
+  int nxbins_;
+  int nybins_;
   double xlo_;
   double xhi_;
   double ylo_;
@@ -57,7 +58,8 @@ public:
   void setXtitle   (TString s) { xtitle_ = s; /*cout << "Setxtitle_:  1." << xtitle_ << "  2." << s << endl; */ doConstructYtitle(); }
   void setText     (TString s) { text_      = s; }
   void setExtraText(TString s) { text2_     = s; }
-  void setNBins    (int     i) { nbins_     = i; }
+  void setNxbins   (int     i) { nxbins_    = i; }
+  void setNybins   (int     i) { nybins_    = i; }
   void setXlow     (double  d) { xlo_       = d; }
   void setXhigh    (double  d) { xhi_       = d; }
   void setYlow     (double  d) { ylo_       = d; }
@@ -74,7 +76,8 @@ public:
   TString getExtra    () const { return extra_    ; } 
   TString getText     () const { return text_     ; } 
   TString getExtraText() const { return text2_    ; } 
-  int     getNBins    () const { return nbins_    ; }
+  int     getNxbins   () const { return nxbins_   ; }
+  int     getNybins   () const { return nybins_   ; }
   double  getXlow     () const { return xlo_      ; }
   double  getXhigh    () const { return xhi_      ; }
   double  getYlow     () const { return ylo_      ; }
@@ -84,7 +87,7 @@ public:
   //
   void initTexts();
   TString constructYtitle(const TString y, const double low, const double high, const int nb);
-  void doConstructYtitle() { ytitle_ = constructYtitle(xtitle_,xlo_,xhi_,nbins_); }
+  void doConstructYtitle() { ytitle_ = constructYtitle(xtitle_,xlo_,xhi_,nxbins_); }
   TString getFullCut(Dataset ds, TString lumiweight = "", double lumi = 1.0) const; 
   TString getCommonName(TString name);
   void makeSimpleXtitle();

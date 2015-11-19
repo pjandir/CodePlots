@@ -57,7 +57,7 @@ std::vector<ToPlot> makeSearchBinTPs(ToPlot tp) {
         TString all_cuts;
         all_cuts.Form( "((%s)&&(%s)&&(%s)&&(%s))", nb_cut, nj_cut, mht_cut, ht_cut ) ;
 
-        ToPlot newtp(all_cuts,tp.getVarname(),tp.getNBins(),tp.getXlow(),tp.getXhigh());
+        ToPlot newtp(all_cuts,tp.getVarname(),tp.getNxbins(),tp.getXlow(),tp.getXhigh());
         newtp.setBaseline(tp.getBaseline());
         newtp.setExtra(tp.getExtra());
         newtp.setText((TString)label);
@@ -98,7 +98,7 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     label.Form( "%s", fb_njet_name[nji] ) ;
     all_cuts.Form( "&&((%s>%f)&&(%s<%f))", njet_name, fb_njet[nji], njet_name, fb_njet[nji+1] ) ;
 
-    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNBins(),tp.getXlow(),tp.getXhigh());
+    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNxbins(),tp.getXlow(),tp.getXhigh());
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
@@ -109,7 +109,7 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     label.Form( "%s", fb_nb_name[nbi] ) ;
     all_cuts.Form( "&&((%s>%f)&&(%s<%f))", nb_name, fb_nb[nbi], nb_name, fb_nb[nbi+1] ) ;
 
-    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNBins(),tp.getXlow(),tp.getXhigh());
+    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNxbins(),tp.getXlow(),tp.getXhigh());
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
@@ -120,7 +120,7 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     label.Form( "%s", fb_mht_name[mhti] ) ;
     all_cuts.Form( "&&((%s>%f)&&(%s<%f))", mht_name, fb_mht[mhti], mht_name, fb_mht[mhti+1] ) ;
 
-    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNBins(),tp.getXlow(),tp.getXhigh());
+    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNxbins(),tp.getXlow(),tp.getXhigh());
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
@@ -131,7 +131,7 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     label.Form( "%s", fb_ht_name[hti] ) ;
     all_cuts.Form( "&&((%s>%f)&&(%s<%f))", ht_name, fb_ht[hti], ht_name, fb_ht[hti+1] ) ;
 
-    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNBins(),tp.getXlow(),tp.getXhigh());
+    ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNxbins(),tp.getXlow(),tp.getXhigh());
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
