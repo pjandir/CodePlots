@@ -8,25 +8,25 @@ class Dataset
 {
 private:
 
-  TString name_;
-  TString label_;
+  TString name_   ;
+  TString label_  ;
   TString legname_;
-  int color_;
+  TString extra_  ;
+  int color_    ;
   int markstyle_;
   int linestyle_;
-  double weight_;
+  double weight_     ;
   double scalefactor_;
-  TString extra_;
   TChain * ch_;
-  TH1D * h_;
+  TH1D * h_  ;
   TH2D * h2D_;
   //std::vector<Sample> thesamples;
 
   Dataset();
 
 public:
-  Dataset(TString n, TString l, int c, int ms = kFullDotMedium, int ls = 1, double w = 1., double sf = 1., TString t = "PreSelection");
-  Dataset(TString n, TString l, int c, double w, TString t = "PreSelection");
+  Dataset(TString n, TString l, int c, int ms = kFullDotMedium, int ls = 1, double w = 1., double sf = 1., TString t = "tree");
+  Dataset(TString n, TString l, int c, double w, TString t = "tree");
   ~Dataset();
 
   //Setters

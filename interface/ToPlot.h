@@ -9,24 +9,24 @@ class ToPlot
 private:
 
   TString selection_;
-  TString varname_;
-  TString xtitle_;
-  TString ytitle_;
-  TString baseline_;
-  TString weights_;
-  TString extra_;
-  TString text_;
-  TString text2_;
+  TString varname_  ;
+  TString xtitle_   ;
+  TString ytitle_   ;
+  TString baseline_ ;
+  TString weights_  ;
+  TString extra_    ;
+  TString text_     ;
+  TString text2_    ;
   int nxbins_;
   int nybins_;
   double xlo_;
   double xhi_;
   double ylo_;
   double yhi_;
-  float tx1_;
-  float ty1_;
-  float tx2_;
-  float ty2_;
+  float tx1_ ;
+  float ty1_ ;
+  float tx2_ ;
+  float ty2_ ;
   float t2x1_;
   float t2y1_;
   float t2x2_;
@@ -55,7 +55,7 @@ public:
   void setVarname  (TString s) { varname_   = s; }
   void setBaseline (TString s) { baseline_  = s; }
   void setExtra    (TString s) { extra_     = s; }
-  void setXtitle   (TString s) { xtitle_ = s; /*cout << "Setxtitle_:  1." << xtitle_ << "  2." << s << endl; */ doConstructYtitle(); }
+  void setXtitle   (TString s) { xtitle_    = s; doConstructYtitle(); }
   void setText     (TString s) { text_      = s; }
   void setExtraText(TString s) { text2_     = s; }
   void setNxbins   (int     i) { nxbins_    = i; }
@@ -87,7 +87,7 @@ public:
   //
   void initTexts();
   TString constructYtitle(const TString y, const double low, const double high, const int nb);
-  void doConstructYtitle() { ytitle_ = constructYtitle(xtitle_,xlo_,xhi_,nxbins_); }
+  void  doConstructYtitle() { ytitle_ = constructYtitle(xtitle_,xlo_,xhi_,nxbins_); }
   TString getFullCut(Dataset ds, TString lumiweight = "", double lumi = 1.0) const; 
   TString getCommonName(TString name);
   void makeSimpleXtitle();

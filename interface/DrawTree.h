@@ -89,7 +89,6 @@ private:
   //--
   TCanvas   * thecan_   ; // Standard canvas
   TLegend   * theleg_   ; // Standard legend
-  ////TLine     * thelin_   ; // Standard line
   TLatex    * text1_    ; // Inside a plot text 
   TLatex    * text2_    ; // Plot header text
   TLatex    * text3_    ; // Page number text
@@ -229,18 +228,19 @@ public:
   void addData(std::vector<Dataset> vec);
   void addLine(float x1, float y1, float x2, float y2, int col = 1, int sty = 7, int wid = 3);
 
-  void autoAddDatasets(TString path = "../files/", TString what = "", TString back = "-skim.root");
-
   void plot(TString plotopt = "");
+
+  //Custom functions
+  void autoAddDatasets(TString path = "../files/", TString what = "", TString back = "-skim.root");
  
-  //Experimental
+  //Experimental functions
   void Nminus1plots(ToPlot tp, TString token = "$$"); 
   void cutflow(TString strcuts, TString strcuts2 = "", TString strweight = "", TString strnames = "", TString strfile = "", 
                bool dolumi = true, bool doraw = true, bool dolatex = false);
   void sens_table(Dataset bg, TString strcuts, TString strweight, TString strnames, TString strfile = "", TString strvar = "Q", bool dolatex = false);
   void plot2D_sb(TString plot, TString sel, TString base);
-  ///void makeSearchBinTPs(ToPlot tp);
 
+  //Custom, unique functions
   void makeMDP_HiLo_Table();
   void makeMDP_HiLo_Table2(ToPlot tp);
   double calcTotal(TChain * tree, int flag);
