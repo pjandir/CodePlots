@@ -40,26 +40,26 @@
 #include "TIterator.h"
 #include "TLorentzVector.h"
 
-#ifdef __MAKECINT__
-#pragma link C++ class vector<TLorentzVector>+;
-#endif
-
 
 // Simple helper methods and other miscellanea 
 // -------------------------------------------
 //
 
+//Make dictionary for accessing vectors of TLorentzVector
+#ifdef __MAKECINT__
+#pragma link C++ class vector<TLorentzVector>+;
+#endif
+
 //Used as shorthand for sprintf into the global char array
 #define myp(...) sprintf(rt::myout,__VA_ARGS__)
 
+//Easy printout for bools
 #define BOOL_STR(b) ((b)?"true":"false")
 
-//gInterpreter->GenerateDictionary("vector<TLorentzVector>","vector");
 
 //Used for verbose levels of printing during execution
 //Identical to TError.h (except 'v' instead of 'k')
 enum VerbosityLevels {vPrint=0,vInfo=1000,vWarning=2000,vError=3000,vBreak=4000,vSysError=5000,vFatal=6000,vUnset=-1};
-//enum VerbosityLevels {vPrint=0,vInfo,vWarning,vError,vBreak,vSysError,vFatal,vUnset};
 
 
 //Namespace
@@ -107,7 +107,6 @@ namespace rt
       if (TString(obj->GetName()).Index(re)>=0) {
         obj->Write() ;
         std::cout << "." ;
-    //  cout << setw(9) << counter++ << " : " << obj->GetName() << std::endl ;
       }   
     }
     std::cout << std::endl ;
@@ -134,7 +133,6 @@ namespace rt
           break;
        }
     } // bi
-    //////////// printf("  Cut of %.2f is bin %d (low edge = %.2f)\n", cut, cbi, xaxis -> GetBinLowEdge(cbi) ) ;
 
     double ivl, iel, ivh, ieh;
     ivl = hp -> IntegralAndError( 1, cbi-1, iel );

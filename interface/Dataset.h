@@ -20,7 +20,6 @@ private:
   TChain * ch_;
   TH1D * h_  ;
   TH2D * h2D_;
-  //std::vector<Sample> thesamples;
 
   Dataset();
 
@@ -32,12 +31,12 @@ public:
   //Setters
   //
   void setLabel (TString s) { label_       = s; }
+  void setExtra (TString s) { extra_       = s; }
   void setColor     (int i) { color_       = i; } 
   void setMarkstyle (int i) { markstyle_   = i; }
   void setLinestyle (int i) { linestyle_   = i; }
   void setWeight (double d) { weight_      = d; }
   void setSf     (double d) { scalefactor_ = d; }
-  void setExtra (TString s) { extra_       = s; }
   //Not quite the 'normal' setters
   void setLegname(); 
   void setHist  (TH1D * h1d) { h_   = (TH1D*) h1d->Clone(); }
@@ -70,14 +69,14 @@ public:
   void addOverflow();
   void extractExtra();
   
-  void  project    (TString hname, TString var, TString cut, int nbins, double lo, double hi, bool forcutflow = false);
-  TH1D* project_ret(TString hname, TString var, TString cut, int nbins, double lo, double hi, bool forcutflow = false);
-  void project2D(TString hname, TString var, TString cut, int nbinsx, double * binx, int nbinsy, double * biny);
-
   void setHistLineColor();
   void setHistMarkColor();
   void setHistFillColor();
   void setHistLineAndMarkColor();
+
+  void  project    (TString hname, TString var, TString cut, int nbins, double lo, double hi, bool forcutflow = false);
+  TH1D* project_ret(TString hname, TString var, TString cut, int nbins, double lo, double hi, bool forcutflow = false);
+  void project2D(TString hname, TString var, TString cut, int nbinsx, double * binx, int nbinsy, double * biny);
 
 };  // class Dataset 
 

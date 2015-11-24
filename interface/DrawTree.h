@@ -44,34 +44,34 @@ private:
   int ratiopadheight_; // Height of the ratio plot pad (added to canvas height) 
   int plotnumber_    ; // (Internal) Dummy value to number plots 
   //--
-  float legx1_        ; // Set xNDC1 for legend. Low of 0.7 
-  float legx2_        ; // Set xNDC2 for legend.
-  float legy1_        ; // Set yNDC1 for legend. Low of 0.5 
-  float legy2_        ; // Set yNDC2 for legend. 
-  float xlabeloffset_ ; // Set label offset for x-axis 
-  float xtitleoffset_ ; // Set title offset for x-axis (was 0.97)
-  float ylabeloffset_ ; // Set label offset for y-axis (was 0.015)
-  float ytitleoffset_ ; // Set title offset for y-axis (was 0.97)
-  float rightmargin_  ; // Set pad margin
-  float leftmargin_   ; // Set pad margin
-  float topmargin_    ; // Set pad margin
-  float bottommargin_ ; // Set pad margin
-  float textinsidex_  ; // Set xNDC for text box written inside plot
-  float textinsidey_  ; // Set yNDC for text box written inside plot
-  float textinside2x_ ; // Set xNDC for text box written inside plot
-  float textinside2y_ ; // Set yNDC for text box written inside plot
-  float pavetextx1_   ; // Set xNDC1 for pave text box written inside plot
-  float pavetextx2_   ; // Set xNDC2 for pave text box written inside plot
-  float pavetexty1_   ; // Set yNDC1 for pave text box written inside plot
-  float pavetexty2_   ; // Set yNDC2 for pave text box written inside plot
-  float pgnumberx_    ; // Set xNDC for page number text
-  float pgnumbery_    ; // Set yNDC for page number text
-  float ratiomin_     ; // Minimum y-value for ratio plot
-  float ratiomax_     ; // Maximum y-value for ratio plot
-  float inflateymax_  ; // Inflate y-axis range
-  float renorm_       ; // Set renormalization factor. 1 for none, and -1 for total events.
-  float histmax_      ; // User input maximum for plotted histogram
-  float histmin_      ; // User input minimum for plotted histogram
+  float legx1_       ; // Set xNDC1 for legend. Low of 0.7 
+  float legx2_       ; // Set xNDC2 for legend.
+  float legy1_       ; // Set yNDC1 for legend. Low of 0.5 
+  float legy2_       ; // Set yNDC2 for legend. 
+  float xlabeloffset_; // Set label offset for x-axis 
+  float xtitleoffset_; // Set title offset for x-axis (was 0.97)
+  float ylabeloffset_; // Set label offset for y-axis (was 0.015)
+  float ytitleoffset_; // Set title offset for y-axis (was 0.97)
+  float rightmargin_ ; // Set pad margin
+  float leftmargin_  ; // Set pad margin
+  float topmargin_   ; // Set pad margin
+  float bottommargin_; // Set pad margin
+  float textinsidex_ ; // Set xNDC for text box written inside plot
+  float textinsidey_ ; // Set yNDC for text box written inside plot
+  float textinside2x_; // Set xNDC for text box written inside plot
+  float textinside2y_; // Set yNDC for text box written inside plot
+  float pavetextx1_  ; // Set xNDC1 for pave text box written inside plot
+  float pavetextx2_  ; // Set xNDC2 for pave text box written inside plot
+  float pavetexty1_  ; // Set yNDC1 for pave text box written inside plot
+  float pavetexty2_  ; // Set yNDC2 for pave text box written inside plot
+  float pgnumberx_   ; // Set xNDC for page number text
+  float pgnumbery_   ; // Set yNDC for page number text
+  float ratiomin_    ; // Minimum y-value for ratio plot
+  float ratiomax_    ; // Maximum y-value for ratio plot
+  float inflateymax_ ; // Inflate y-axis range
+  float renorm_      ; // Set renormalization factor. 1 for none, and -1 for total events.
+  float histmax_     ; // User input maximum for plotted histogram
+  float histmin_     ; // User input minimum for plotted histogram
   //--
   double lumi_ ; // Data scale in pb
   //--
@@ -87,19 +87,19 @@ private:
   TString luminame_    ; // Name of the lumi weight variable in the tree
   TString treename_    ; // Name of the TTree (inc folders) in the file
   //--
-  TCanvas   * thecan_   ; // Standard canvas
-  TLegend   * theleg_   ; // Standard legend
-  TLatex    * text1_    ; // Inside a plot text 
-  TLatex    * text2_    ; // Plot header text
-  TLatex    * text3_    ; // Page number text
-  TLatex    * text4_    ; // Unused, for now
-  TPaveText * ptext_    ; // Alternate to inside text
-  TFile     * fileout_  ; // Standard output root file
-  TH1D      * ratio_    ; // Standard ratio plot
-  TLine     * ratiolin_ ; // Standard ratio plot line at 1
-  THStack   * thestack_ ; // The stack of all datasets 
-  TH1D      * totalsm_  ; // Sum of total SM MC
-  TGraphErrors * mcerr_ ; // Error on SM MC
+  TCanvas   * thecan_  ; // Standard canvas
+  TLegend   * theleg_  ; // Standard legend
+  TLatex    * text1_   ; // Inside a plot text 
+  TLatex    * text2_   ; // Plot header text
+  TLatex    * text3_   ; // Page number text
+  TLatex    * text4_   ; // Unused, for now
+  TPaveText * ptext_   ; // Alternate to inside text
+  TFile     * fileout_ ; // Standard output root file
+  TH1D      * ratio_   ; // Standard ratio plot
+  TLine     * ratiolin_; // Standard ratio plot line at 1
+  THStack   * thestack_; // The stack of all datasets 
+  TH1D      * totalsm_ ; // Sum of total SM MC
+  TGraphErrors * mcerr_; // Error on SM MC
   
   std::vector<ToPlot>  thevar_;
   std::vector<TLine *> thelin_;
@@ -141,10 +141,9 @@ public:
   void setInframe      (bool b) { inframe_       = b; }
   void setLuminorm     (bool b) { luminorm_      = b; }
   void setUseRedXtitle (bool b) { useredxtitle_  = b; } 
-  void setVerbose    (int i)        ; 
-  void setCmEnergy   (int i)        { cmEnergy_       = i;                    } 
-  void setCanvasDim  (int i, int j) { canvaswidth_    = i; canvasheight_ = j; } 
-  void setRatioheight(int i)        { ratiopadheight_ = i;                    } 
+  void setCmEnergy    (int i)        { cmEnergy_       = i;                    } 
+  void setCanvasDim   (int i, int j) { canvaswidth_    = i; canvasheight_ = j; } 
+  void setRatioheight (int i)        { ratiopadheight_ = i;                    } 
   void setMargins     (float  r, float  l, float  t, float  b) { rightmargin_ =  r; leftmargin_ =  l; topmargin_  =  t; bottommargin_ =  b; } 
   void setLegendDim   (float x1, float y1, float x2, float y2) { legx1_       = x1; legx2_      = x2; legy1_      = y1; legy2_        = y2; } 
   void setPaveTextDim (float x1, float y1, float x2, float y2) { pavetextx1_  = x1; pavetextx2_ = x2; pavetexty1_ = y1; pavetexty2_   = y2; } 
@@ -172,6 +171,7 @@ public:
   void setRatioytitle(TString s) { ratioytitle_  = s; } 
   void setLumiName   (TString s) { luminame_     = s; } 
   //Special
+  void setVerbose  (int i); 
   void setText     (TString s, float x, float y) { textinside_  = s; textinsidex_  = x; textinsidey_  = y; }
   void setExtraText(TString s, float x, float y) { textinside2_ = s; textinside2x_ = x; textinside2y_ = y; }
   void setPavetext (TString s, float x1, float y1, float x2, float y2) { pavetext_ = s; pavetextx1_ = x1; pavetextx2_ = x2; pavetexty1_ = y1; pavetexty2_ = y2; }
@@ -188,27 +188,6 @@ public:
 
   //Other
   //
-  void renewCanvas(TString opt = "", float lm = -1.);
-  void renewLegend();
-  void renewLegend(float x1, float y1, float x2, float y2);
-
-  TString getSaveName1(TString name);
-  TString getSaveName2(int place);
-  TString getSaveName3();
-  void setOutputFolder();
-
-  double findOverallMax(TH1D * h);
-  double findOverallMin(TH1D * h);
-  double findTotalMin(std::vector<double> histmins);
-
-  void plotBlankPage(int place, TString name = "BLANK");
-  void setupNewOutputFile(TString fname, TString fmod = "", TString fext = "");
-
-  void drawPlotHeader();
-  void drawPageNumber(int n);
-  void drawText();
-  void drawExtraText();
-
   bool isThereBGMC () { return (thebgmc_ .size()>0); }
   bool isThereSigMC() { return (thesigmc_.size()>0); }
   bool isThereData () { return (thedata_ .size()>0); }
@@ -218,15 +197,35 @@ public:
   void clearData () { thedata_ .clear(); }
   void clearLine () { thelin_  .clear(); }
 
-  void addVar(ToPlot tp);
-  void addVar(std::vector<ToPlot> vtp);
-  void addBGMC(Dataset ds);
-  void addBGMC(std::vector<Dataset> vec);
+  void addVar  (ToPlot  tp);
+  void addBGMC (Dataset ds);
   void addSigMC(Dataset ds);
+  void addData (Dataset ds);
+  void addVar  (std::vector<ToPlot>  vtp);
+  void addBGMC (std::vector<Dataset> vec);
   void addSigMC(std::vector<Dataset> vec);
-  void addData(Dataset ds);
-  void addData(std::vector<Dataset> vec);
+  void addData (std::vector<Dataset> vec);
   void addLine(float x1, float y1, float x2, float y2, int col = 1, int sty = 7, int wid = 3);
+  void renewCanvas(TString opt = "", float lm = -1.);
+  void renewLegend();
+  void renewLegend(float x1, float y1, float x2, float y2);
+
+  TString getSaveName1(TString name);
+  TString getSaveName2(int    place);
+  TString getSaveName3();
+  void setOutputFolder();
+
+  double findOverallMax(TH1D * h);
+  double findOverallMin(TH1D * h);
+  double findTotalMin(std::vector<double> histmins);
+
+  void plotBlankPage(int place, TString name = "BLANK");
+  void setupNewOutputFile(TString fname, TString fmod =  "", TString fext = "");
+
+  void drawPlotHeader();
+  void drawPageNumber(int n);
+  void drawText();
+  void drawExtraText();
 
   void plot(TString plotopt = "");
 
