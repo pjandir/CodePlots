@@ -18,7 +18,7 @@ void Example() {
   //The object that draws it all
   DrawTree * dt = new DrawTree("tree",vError);
 
-  //Set the various options
+  //Set some various options
   dt->setLogy(true);
   dt->setDrawmcerr(true);
   dt->setDostack(true);

@@ -9,7 +9,7 @@
   gROOT->LoadMacro("../src/ToPlot.cc++  ");
   gROOT->LoadMacro("../src/Color.cc++   ");
   gROOT->LoadMacro("../src/DrawTree.cc++");
-  gROOT->LoadMacro("../test/Example.cc++ ");
+  gROOT->LoadMacro("../test/Example.cc++");
 
   gROOT->ProcessLine("Example()");
 }
