@@ -8,9 +8,11 @@
 //   - Color is simply a holder for custom colors   
 //     - This statement will show them: Color::plotTheColors();
 //   - ToPlot holds the plotted variable, selection, plot dimensions at its core
-//   - Dataset holds an individual physics dataset with
+//   - Dataset holds an individual physics dataset as well as a Color
 //   - DrawTree is the driver of it all, incorporating the above three
-//  
+//     - Use ToPlot to graph variable from Dataset(s)
+// 
+// The style used is the 2015 RunII CMS style    
 //  
 
 void Example() {
@@ -19,6 +21,7 @@ void Example() {
   DrawTree * dt = new DrawTree("tree",vError);
 
   //Set some various options
+  //Many other options are available
   dt->setLogy(true);
   dt->setDrawmcerr(true);
   dt->setDostack(true);
@@ -32,10 +35,11 @@ void Example() {
   dt->autoAddDatasets("path/to/the/root/files","fullqcd ttbar wjets singlet zinv data","*.root");
 
   //Add (one or more) 'ToPlot' which sets the selection, plotted variable, plot dimensions 
+  //Has some more options as well, including ability to use pre-defined options for variables
+  //     
   //This will plot HT and MHT variables
   dt->addVar(ToPlot("MHT>200&&Leptons==0&&BTags>=0&&NJets>3&&HT>500&&JetID>0","HT","","","",50,500,2500));
   dt->addVar(ToPlot("MHT>200&&Leptons==0&&BTags>=0&&NJets>3&&HT>500&&JetID>0","MHT","","","",50,200,2200));
-
 
   //Function plots N-1 style in first argument - see function for full details
   //dt->Nminus1plots(ToPlot("HT>500$$MHT>200$$(Leptons==0)$$BTags>=0$$NJets>3$$MinDeltaPhi>0.5","HT","","","(isoPionTracks+isoElectronTracks+isoMuonTracks==0)&&(JetID>0)",40,0,4000),"$$");
