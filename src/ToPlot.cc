@@ -254,12 +254,12 @@ void ToPlot::makeSimpleXtitle() {
   else if ( title == "mindeltaphin" ) title = "#Delta#hat#phi_{min}";
   else if ( title == "mindeltaphi" ) title = "#Delta#phi_{min} [rad.]";
   else if ( title == "deltaphistar" ) title = "#Delta#phi* [rad.]";
-  else if ( title == "deltaphi1" ) title = "#Delta#phi(H_{T}^{miss}, Jet_{1}) [rad.]";
-  else if ( title == "deltaphi2" ) title = "#Delta#phi(H_{T}^{miss}, Jet_{2}) [rad.]";
-  else if ( title == "deltaphi3" ) title = "#Delta#phi(H_{T}^{miss}, Jet_{3}) [rad.]";
-  else if ( title == "deltaphi4" ) title = "#Delta#phi(H_{T}^{miss}, Jet_{4}) [rad.]";
-  else if ( title == "deltaphi5" ) title = "#Delta#phi(H_{T}^{miss}, Jet_{5}) [rad.]";
-  else if ( title == "deltaphi6" ) title = "#Delta#phi(H_{T}^{miss}, Jet_{6}) [rad.]";
+  else if ( title == "deltaphi1" ) title = "#Delta#phi(jet_{1}, H_{T}^{miss}) [rad.]";
+  else if ( title == "deltaphi2" ) title = "#Delta#phi(jet_{2}, H_{T}^{miss}) [rad.]";
+  else if ( title == "deltaphi3" ) title = "#Delta#phi(jet_{3}, H_{T}^{miss}) [rad.]";
+  else if ( title == "deltaphi4" ) title = "#Delta#phi(jet_{4}, H_{T}^{miss}) [rad.]";
+  else if ( title == "deltaphi5" ) title = "#Delta#phi(jet_{5}, H_{T}^{miss}) [rad.]";
+  else if ( title == "deltaphi6" ) title = "#Delta#phi(jet_{6}, H_{T}^{miss}) [rad.]";
   else if ( title == "deltaphin1" ) title = "#Delta#hat#phi_{1}";
   else if ( title == "deltaphin2" ) title = "#Delta#hat#phi_{2}";
   else if ( title == "deltaphin3" ) title = "#Delta#hat#phi_{3}";
