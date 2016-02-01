@@ -1197,6 +1197,7 @@ void DrawTree::Nminus1plots(ToPlot tp, TString token) {
 //Main cuts in cutflow, staggered cuts, weight variable cuts, output names to each cut, output file name, apply lumi?, output event yields or percentages?, output to latex?
 void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TString strnames, TString strfile, bool dolumi, bool doraw, bool dolatex) {
 
+  bool relative = true; 
   TString fullcut, lumiweight; 
   TString varcut = "NJets";
   double nbins = 100, xlo = 0, xhi = 100;
@@ -1272,6 +1273,8 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
   int ncuts  = cuts1.size();
   int ncuts2 = cuts2.size();
   int nnames = names.size();
+  std::vector<double> ds_vals1;  
+  std::vector<double> ds_vals2; 
   if ( strnames != "" && nnames < (ncuts+ncuts2) ) {
     myp("Warning: There are less cut names given than are total cuts to make. Will not use names.\n");
     pts(vWarning);
@@ -1300,6 +1303,8 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
   }
   TString print = "Cut";
   if ( dolatex ) print.Prepend("     ");
+  int extra_width = 0;
+  if ( relative ) extra_width = 7;
   for (std::vector<Dataset>::iterator ds = datasets.begin(); ds != datasets.end(); ++ds) {
     if ( dolatex ) {
       TString label = ds->getLegname(), texstr = "";
@@ -1309,8 +1314,8 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
       else sprintf(dump," & %s%s%s ",texstr.Data(),label.Data(),texstr.Data()); 
     }
     else {
-      if ( ds == datasets.begin() ) sprintf(dump,"%*s|%*s ",label_width-3,"",width,ds->getLabel().Data());
-      else sprintf(dump,"|%*s ",width,ds->getLabel().Data()); 
+      if ( ds == datasets.begin() ) sprintf(dump,"%*s|%*s ",label_width-3,"",width+extra_width,ds->getLabel().Data());
+      else sprintf(dump,"|%*s ",width+extra_width,ds->getLabel().Data()); 
     }
     print += dump;
   }
@@ -1341,7 +1346,7 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
     //Loop over datasets
     for (std::vector<Dataset>::iterator ds = datasets.begin(); ds != datasets.end(); ++ds) {
       TString s_dsnum = "cf_" ; s_dsnum += i;
-      double val = 0, tot = 0;
+      double val = 0, tot = 0, rel = 0;
       TString thecut = cut;
       if ( !ds->getLabel().Contains("Data") ) thecut += lumiweight;
       
@@ -1358,16 +1363,31 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
       //Does not take DS weight/sf into account
       ds->project(varcut+s_dsnum,varcut,thecut,nbins,xlo,xhi,true);
       val = ds->getFullEntries();
+      if ( relative ) { 
+        if ( i != 0 ) rel = val/ds->getSpecial();
+        else          rel = 1.0;
+      }
+      ds->setSpecial(val);
 
       if ( !doraw ) val = val/tot*100;
       if ( dolatex ) {
-        if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.*f ",width,precision,val);
-        else sprintf(dump,"& %*.0f ",width,val);
+        //if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.*f ",width,precision,val);
+        if ( !doraw ) sprintf(dump,"& %*.*f ",width,precision,val);
+        else { 
+          if ( !relative ) sprintf(dump,"& %*.0f ",width,val);
+          else sprintf(dump,"& %*.0f (%.*f)",width,val,precision,rel); 
+        }
+        if ( ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.0f",width,val); 
         if ( ds == datasets.end()-1 ) strcat(dump," \\\\");
       }
       else {
-        if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.*f ",width,precision,val);
-        else sprintf(dump,"|%*.0f ",width,val);
+        //if ( !doraw || !(ds->getLabel().Contains("Data")) ) { sprintf(dump,"|%*.*f ",width,precision,val); cout << "HERE" << endl;}
+        if ( !doraw  ) sprintf(dump,"|%*.*f ",width,precision,val); 
+        else { 
+          if ( !relative ) sprintf(dump,"|%*.0f ",width,val);
+          else sprintf(dump,"|%*.0f (%.*f)",width,val,precision,rel); 
+        }
+        if ( ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.0f",width,val);
       }
 
       if ( printout ) cout << dump;
@@ -1376,6 +1396,7 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
     if ( printout ) cout << endl;
     else ofs << endl;
 
+    if ( i != 0 ) ds_vals1.clear();
   }//cuts1
 
   if ( ncuts2 > 0 ) {
@@ -1404,7 +1425,7 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
     //Loop over datasets
     for (std::vector<Dataset>::iterator ds = datasets.begin(); ds != datasets.end(); ++ds) {
       TString s_dsnum = "cf_" ; s_dsnum += i;
-      double val = 0, tot = 0;
+      double val = 0, tot = 0, rel = 0;
       TString thecut = cut;
       if ( !ds->getLabel().Contains("Data") ) thecut += lumiweight;
 
@@ -1423,16 +1444,27 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
       //val=calcTotal(ds->getTree(),i+1);
       //val=calcTotal2(ds->getTree(),ds->getLabel(),i+1);
       //tot = val;
+      rel = val/ds->getSpecial();
 
       if ( !doraw ) val = val/tot*100;
       if ( dolatex ) {
-        if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.*f ",width,precision,val);
-        else sprintf(dump,"& %*.0f ",width,val);
+        //if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.*f ",width,precision,val);
+        if ( !doraw ) sprintf(dump,"& %*.*f ",width,precision,val);
+        else { 
+          if ( !relative ) sprintf(dump,"& %*.0f ",width,val);
+          else sprintf(dump,"& %*.0f (%.*f)",width,val,precision,rel); 
+        }
+        if ( ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.0f",width,val); 
         if ( ds == datasets.end()-1 ) strcat(dump," \\\\");
       }
       else {
-        if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.*f ",width,precision,val);
-        else sprintf(dump,"|%*.0f ",width,val);
+        //if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.*f ",width,precision,val);
+        if ( !doraw  ) sprintf(dump,"|%*.*f ",width,precision,val); 
+        else { 
+          if ( !relative ) sprintf(dump,"|%*.0f ",width,val);
+          else sprintf(dump,"|%*.0f (%.*f)",width,val,precision,rel); 
+        }
+        if ( ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.0f",width,val);
       }
 
       if ( printout ) cout << dump;

@@ -7,7 +7,7 @@ Dataset::Dataset() {
 } 
 
 Dataset::Dataset(TString n, TString l, int c, int ms, int ls, double w, double sf, TString t) 
-: name_(n), label_(l), extra_(""), color_(c), markstyle_(ms), linestyle_(ls), weight_(w), scalefactor_(sf)
+: name_(n), label_(l), extra_(""), color_(c), markstyle_(ms), linestyle_(ls), weight_(w), scalefactor_(sf), special_(0.)
 {
   //Error checks
   if ( name_ == "" ) {
@@ -36,7 +36,7 @@ Dataset::Dataset(TString n, TString l, int c, int ms, int ls, double w, double s
 }
 
 Dataset::Dataset(TString n, TString l, int c, double w, TString t) 
-: name_(n), label_(l), color_(c), markstyle_(kFullDotMedium), linestyle_(1), weight_(w), scalefactor_(1.)
+: name_(n), label_(l), color_(c), markstyle_(kFullDotMedium), linestyle_(1), weight_(w), scalefactor_(1.), special_(0.)
 {
   //Error checks
   if ( name_ == "" ) {

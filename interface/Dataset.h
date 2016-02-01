@@ -17,6 +17,7 @@ private:
   int linestyle_;
   double weight_     ;
   double scalefactor_;
+  double special_    ;
   TChain * ch_;
   TH1D * h_  ;
   TH2D * h2D_;
@@ -37,6 +38,7 @@ public:
   void setLinestyle (int i) { linestyle_   = i; }
   void setWeight (double d) { weight_      = d; }
   void setSf     (double d) { scalefactor_ = d; }
+  void setSpecial(double d) { special_     = d; }
   //Not quite the 'normal' setters
   void setLegname(); 
   void setHist  (TH1D * h1d) { h_   = (TH1D*) h1d->Clone(); }
@@ -53,6 +55,7 @@ public:
   int   getLinestyle() const { return linestyle_  ; }
   double   getWeight() const { return weight_     ; }
   double       getSf() const { return scalefactor_; }
+  double  getSpecial() const { return special_    ; }
   TString   getExtra() const { return extra_      ; }
   TH1D     * getHist(); 
   TH1D     * getHist() const; 
