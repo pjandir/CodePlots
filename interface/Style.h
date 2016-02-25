@@ -117,7 +117,7 @@ void initStyle(TString ts) {
     theStyle->SetPadRightMargin(0.02);
 
     // For the Global title:
-    theStyle->SetOptTitle(0);
+    //theStyle->SetOptTitle(0);
     theStyle->SetTitleFont(42);
     theStyle->SetTitleColor(1);
     theStyle->SetTitleTextColor(1);

@@ -121,6 +121,8 @@ void Dataset::setLegname() {
   else if ( copy == "wjets" || copy == "wjet" ) legname_ = "W+jets";
   else if ( copy == "zjets" || copy == "zinv" || copy == "znunu" || copy == "zjet" ) legname_ = "Z#rightarrow#nu#bar{#nu}";
   else if ( copy == "singlet" || copy == "singletop" ) legname_ = "Single top";
+  else if ( copy == "lostlep" ) legname_ = "Lost Lepton";
+  else if ( copy == "hadtau" ) legname_ = "#splitline{Hadronic}{#tau lepton}";
   else if ( copy == "other" ) legname_ = "Other";
   else if ( copy.Contains("t1") && !copy.Contains("qcd") ) {
 /*

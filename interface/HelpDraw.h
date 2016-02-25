@@ -35,6 +35,8 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "TH3.h"
+#include "TPie.h"
+#include "TPieSlice.h"
 #include "TF1.h"
 #include "TList.h"
 #include "TIterator.h"

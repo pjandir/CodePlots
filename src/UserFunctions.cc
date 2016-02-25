@@ -13,7 +13,6 @@ using namespace rt;
 //
 
 
-
 std::vector<ToPlot> makeSearchBinTPs(ToPlot tp) {
 
   char mht_name [10] = "MHT"   ;
