@@ -17,6 +17,7 @@ private:
   TString extra_    ;
   TString text_     ;
   TString text2_    ;
+  TString plotname_ ;
   int nxbins_;
   int nybins_;
   double xlo_;
@@ -58,6 +59,7 @@ public:
   void setXtitle   (TString s) { xtitle_    = s; doConstructYtitle(); }
   void setText     (TString s) { text_      = s; }
   void setExtraText(TString s) { text2_     = s; }
+  void setPlotname (TString s) { plotname_  = s; }
   void setNxbins   (int     i) { nxbins_    = i; }
   void setNybins   (int     i) { nybins_    = i; }
   void setXlow     (double  d) { xlo_       = d; }
@@ -76,6 +78,7 @@ public:
   TString getExtra    () const { return extra_    ; } 
   TString getText     () const { return text_     ; } 
   TString getExtraText() const { return text2_    ; } 
+  TString getPlotname () const { return plotname_ ; } 
   int     getNxbins   () const { return nxbins_   ; }
   int     getNybins   () const { return nybins_   ; }
   double  getXlow     () const { return xlo_      ; }

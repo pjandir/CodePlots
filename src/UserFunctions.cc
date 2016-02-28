@@ -46,7 +46,6 @@ std::vector<ToPlot> makeSearchBinTPs(ToPlot tp) {
         char ht_cut  [1000];
         char mht_cut [1000];
         TString label;
-        ///char label   [1000];
 
         ++bin_number;
 
@@ -54,9 +53,9 @@ std::vector<ToPlot> makeSearchBinTPs(ToPlot tp) {
         sprintf( ht_cut , "%s>%.1f&&%s<%.1f", ht_name , sb_mhtht_htlo[htmhti] , ht_name , sb_mhtht_hthi[htmhti]  ) ; 
         sprintf( mht_cut, "%s>%.1f&&%s<%.1f", mht_name, sb_mhtht_mhtlo[htmhti], mht_name, sb_mhtht_mhthi[htmhti] ) ; 
         TString all_cuts;
-        all_cuts.Form( "((%s)&&(%s)&&(%s)&&(%s))", nb_cut, nj_cut, mht_cut, ht_cut ) ;
+        all_cuts.Form( "&&((%s)&&(%s)&&(%s)&&(%s))", nb_cut, nj_cut, mht_cut, ht_cut ) ;
 
-        ToPlot newtp(all_cuts,tp.getVarname(),tp.getNxbins(),tp.getXlow(),tp.getXhigh());
+        ToPlot newtp(tp.getSelection()+all_cuts,tp.getVarname(),tp.getNxbins(),tp.getXlow(),tp.getXhigh());
         newtp.setBaseline(tp.getBaseline());
         newtp.setExtra(tp.getExtra());
         newtp.setText((TString)label);
@@ -70,7 +69,7 @@ std::vector<ToPlot> makeSearchBinTPs(ToPlot tp) {
 
 }
 
-std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axislimit = true) {
+std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axislimit = true, TString pname = "") {
 
   char mht_name [10] = "MHT"   ;
   char ht_name  [10] = "HT"    ;
@@ -101,6 +100,8 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
+    TString plotname = pname; plotname += "-nj"; plotname += nji+1;
+    if ( pname != "" ) newtp.setPlotname(plotname);
     if ( axislimit ) newtp.assignAxisLimits("X");
     thetps.push_back(newtp);
   } //njet
@@ -112,6 +113,8 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
+    TString plotname = pname; plotname += "-nb"; plotname += nbi+1;
+    if ( pname != "" ) newtp.setPlotname(plotname);
     if ( axislimit ) newtp.assignAxisLimits("X");
     thetps.push_back(newtp);
   } //nb
@@ -123,6 +126,8 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
+    TString plotname = pname; plotname += "-mht"; plotname += mhti+1;
+    if ( pname != "" ) newtp.setPlotname(plotname);
     if ( axislimit ) newtp.assignAxisLimits("X");
     thetps.push_back(newtp);
   } //mht
@@ -134,6 +139,8 @@ std::vector<ToPlot> makeFineBinOwenTPs(ToPlot tp, TString elabel = "", bool axis
     newtp.setBaseline(tp.getBaseline());
     newtp.setExtra(tp.getExtra());
     newtp.setText(label+" "+elabel);
+    TString plotname = pname; plotname += "-ht"; plotname += hti+1;
+    if ( pname != "" ) newtp.setPlotname(plotname);
     if ( axislimit ) newtp.assignAxisLimits("X");
     thetps.push_back(newtp);
   } //ht
