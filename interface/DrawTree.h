@@ -87,6 +87,8 @@ private:
   TString luminame_    ; // Name of the lumi weight variable in the tree
   TString treename_    ; // Name of the TTree (inc folders) in the file
   //--
+  TDatime     thetime_ ; // The time
+
   TCanvas   * thecan_  ; // Standard canvas
   TLegend   * theleg_  ; // Standard legend
   TLatex    * text1_   ; // Inside a plot text 
@@ -223,6 +225,7 @@ public:
   void setupNewOutputFile(TString fname, TString fmod =  "", TString fext = "");
 
   void drawPlotHeader();
+  void drawSBText(float min, float max); 
   void drawPageNumber(int n);
   void drawText();
   void drawExtraText();
@@ -231,6 +234,7 @@ public:
 
   //Custom functions
   void autoAddDatasets(TString path = "../files/", TString what = "", TString back = "-skim.root");
+  void plotInSB(TString plotopt = ""); 
  
   //Experimental functions
   void Nminus1plots(ToPlot tp, TString token = "$$"); 

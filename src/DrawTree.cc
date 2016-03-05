@@ -30,11 +30,10 @@ DrawTree::DrawTree(TString n, int verboselevel)
   else if ( rt::verbose >= 6000 ) gErrorIgnoreLevel = 6000; //kFatal 
   else                            gErrorIgnoreLevel =   -1; //kUnset
 
-  char dump[1000];
-  sprintf(dump,"\n~~  Creating DrawTree [%s] object...  ~~\n",n.Data());
-  TString print = dump;
-  int width = print.Length(); width -= 2; 
-  myp("\n\n"); pts(vError);
+  TString print;
+  print.Form("\n\t\t\t\t\t\t~~  Creating DrawTree [%s] object...  ~~\n",n.Data());
+  int width = print.Length(); width -= 8; 
+  myp("\n\n\t\t\t\t\t\t"); pts(vError);
   for ( int i = 0; i < width; ++i ) { myp("~"); pts(vError); }
   myp("%s",print.Data()); pts(vError);
 
@@ -155,26 +154,26 @@ DrawTree::DrawTree(TString n, int verboselevel)
   int mid = print.Length()/2;
   int pad = width/2-mid-2;
   for ( int i = 0; i < pad; ++i ) { print.Prepend(" "); print.Append(" "); }
-  print.Prepend("~~"); print.Append("~~\n");
-  myp("%s",print.Data()); pts(vError);
+  print.Prepend("\t\t\t\t\t\t~~"); print.Append("~~\n");
+  myp("%s\t\t\t\t\t\t",print.Data()); pts(vError);
   for ( int i = 0; i < width; ++i ) { myp("~"); pts(vError); }
   myp("\n\n\n"); pts(vError);
 
 
   //
-  myp("\t\tInitial DrawTree User Settings\n"); pts(vError);
-  myp("----------------------------------------------------------\n"    ); pts(vError);
-  myp("Save the plots (individual) : %s\n"   , BOOL_STR(savegraph1_)    ); pts(vError);
-  myp("Save the plots (continuous) : %s\n"   , BOOL_STR(savegraph2_)    ); pts(vError);
-  myp("Draw Data/MC ratio plot     : %s\n"   , BOOL_STR(drawratio_)     ); pts(vError);
-  myp("Draw MC error bands         : %s\n"   , BOOL_STR(drawmcerr_)     ); pts(vError);
-  myp("Draw y-axis in log scale    : %s\n"   , BOOL_STR(logy_)          ); pts(vError);
-  myp("Draw data (black points)    : %s\n"   , BOOL_STR(hasdata_)       ); pts(vError);
-  myp("Center-of-Mass Energy [TeV] : %i\n"   , cmEnergy_                ); pts(vError);
-  myp("Luminosity scale [pb]       : %.0f\n" , lumi_                    ); pts(vError);
-  myp("Output folder name          : %s\n"   , outfolder_.Data()        ); pts(vError);
-  myp("Output continuous pdf file  : %s\n"   , getSaveName2(0).Data()   ); pts(vError);
-  myp("----------------------------------------------------------\n\n\n"); pts(vError);
+  myp("\t\t\t\t\t\t\t    Initial DrawTree User Settings\n"                                ); pts(vError);
+  myp("\t\t\t\t\t------------------------------------------------------------------\n"    ); pts(vError);
+  myp("\t\t\t\t\t\tSave the plots (individual) : %s\n"   , BOOL_STR(savegraph1_)          ); pts(vError);
+  myp("\t\t\t\t\t\tSave the plots (continuous) : %s\n"   , BOOL_STR(savegraph2_)          ); pts(vError);
+  myp("\t\t\t\t\t\tDraw Data/MC ratio plot     : %s\n"   , BOOL_STR(drawratio_)           ); pts(vError);
+  myp("\t\t\t\t\t\tDraw MC error bands         : %s\n"   , BOOL_STR(drawmcerr_)           ); pts(vError);
+  myp("\t\t\t\t\t\tDraw y-axis in log scale    : %s\n"   , BOOL_STR(logy_)                ); pts(vError);
+  myp("\t\t\t\t\t\tDraw data (black points)    : %s\n"   , BOOL_STR(hasdata_)             ); pts(vError);
+  myp("\t\t\t\t\t\tCenter-of-Mass Energy [TeV] : %i\n"   , cmEnergy_                      ); pts(vError);
+  myp("\t\t\t\t\t\tLuminosity scale [pb]       : %.0f\n" , lumi_                          ); pts(vError);
+  myp("\t\t\t\t\t\tOutput folder name          : %s\n"   , outfolder_.Data()              ); pts(vError);
+  myp("\t\t\t\t\t\tOutput continuous pdf file  : %s\n"   , getSaveName2(0).Data()         ); pts(vError);
+  myp("\t\t\t\t\t------------------------------------------------------------------\n\n\n"); pts(vError);
   //
 
 
@@ -200,12 +199,47 @@ DrawTree::~DrawTree() {
   if ( theleg_   != 0 ) delete theleg_  ;
   if ( thecan_   != 0 ) delete thecan_  ;
 
-  myp("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-  pts(vError);
-  myp("~~      Terminating DrawTree object... !       ~~\n");
-  pts(vError);
-  myp("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n");
-  pts(vError);
+  TDatime endtime;
+  int t = endtime.Convert() - thetime_.Convert();
+
+  TString print2 = "Terminating DrawTree object...";
+  TString print1;
+  if ( t < 3600 ) {
+    print1.Form("The DrawTree object was in use for %02.0f:%02.0f.", (double)(t/60),(double)(t%60));
+  }
+  else {
+    print1.Form("The DrawTree object was in use for %02.0f:%02.0f:%02.0f.", (double)t/3600,(double)((double)(t%3600)/60),(double)(t%60));
+  }
+
+  int width1 = print1.Length(); 
+  int width2 = print2.Length();
+  int width  = width1;
+  if ( width2 > width1 ) width = width2;
+  width += 8;
+
+  bool odd = ( width2 % 2 );
+  if ( !odd ) print2.Append(" !");
+  else        print2.Append( "!");
+  odd = ( width1 % 2 );
+  if ( !odd ) print1.Append("  ");
+  else        print1.Append( " ");
+
+  int mid2 = print2.Length()/2;
+  int pad2 = width/2-mid2-2;
+  int mid1 = print1.Length()/2;
+  int pad1 = width/2-mid1-2;
+
+  for ( int i = 0; i < pad1; ++i ) { print1.Prepend(" "); print1.Append(" "); }
+  for ( int i = 0; i < pad2; ++i ) { print2.Prepend(" "); print2.Append(" "); }
+  print1.Prepend("\n\t\t\t\t\t\t~~"); print1.Append("~~\n");
+  print2.Prepend(  "\t\t\t\t\t\t~~"); print2.Append("~~\n");
+  myp("\n\n\n\n\t\t\t\t\t\t"); pts(vError);
+  for ( int i = 0; i < width-1; ++i ) { myp("~"); pts(vError); }
+  myp("%s",print1.Data()); pts(vError);
+  myp("%s",print2.Data()); pts(vError);
+  myp("\t\t\t\t\t\t"); pts(vError);
+  for ( int i = 0; i < width-1; ++i ) { myp("~"); pts(vError); }
+  myp("\n\n\n\n"); pts(vError);
 
 }
 
@@ -225,8 +259,7 @@ void DrawTree::setVerbose(int v) {
 void DrawTree::setOutputFolder() {
 
   if ( outfolder_.Length() < 1 ) { 
-    myp("Output folder name is not set properly. Will revert to output in working directory.\n");
-    pts(vWarning);
+    myp("Output folder name is not set properly. Will revert to output in working directory.\n"); pts(vWarning);
     return;
   } 
 
@@ -238,16 +271,13 @@ void DrawTree::setOutputFolder() {
   int dirnotthere = gSystem->GetPathInfo(outfolder_.Data(),fs);
 
   if ( dirnotthere == 1 ) { //then make the directory
-    myp("Directory %s not found.\n",outfolder_.Data());
-    pts(vPrint);
+    myp("Directory %s not found.\n",outfolder_.Data()); pts(vPrint);
     int mkdirstatus = gSystem->mkdir(outfolder_.Data());
     if ( mkdirstatus == 0 ) {
-      myp("Created it!\n");
-      pts(vPrint);
+      myp("Created it!\n"); pts(vPrint);
     }
     else {
-      myp("Problem creating directory. Will revert to output in working directory.\n");
-      pts(vWarning);
+      myp("Problem creating directory. Will revert to output in working directory.\n"); pts(vWarning);
       outfolder_="";
     }
   }
@@ -426,7 +456,7 @@ void DrawTree::drawPlotHeader() {
   }
   else {  
     if ( drawratio_ ) l /= ratioOffset;
-    posX =   l +  relPosX*3.5*(1-l-r);
+    posX =   l +  relPosX*3.5*(1-l-r); //3.5
     posY = 1-t +     lumiTextOffset*t;
     text1_->SetTextAlign(11);
     text1_->DrawLatex(posX,posY,cmsString);
@@ -456,6 +486,52 @@ void DrawTree::drawPlotHeader() {
   
 }
 
+void DrawTree::drawSBText(float min, float max) {
+
+  // Njet separation lines
+  TLine *tl_njet = new TLine();
+  tl_njet->SetLineStyle(2);
+  tl_njet->DrawLine(25.-0.5,min,25.-0.5,max); 
+  tl_njet->DrawLine(49.-0.5,min,49.-0.5,max); 
+
+  // Njet labels
+  TLatex * ttext_njet = new TLatex();
+  ttext_njet->SetTextFont(42);
+  ttext_njet->SetTextSize(0.050);
+  ttext_njet->SetTextAlign(22);
+  float tm_nj = 0.92;
+  ttext_njet->DrawLatex(13.-0.5 , max*tm_nj , "4 #leq N_{#scale[0.2]{ }jet} #leq 6");
+  ttext_njet->DrawLatex(37.-0.5 , max*tm_nj , "7 #leq N_{#scale[0.2]{ }jet} #leq 8");
+  ttext_njet->DrawLatex(61.-0.5 , max*tm_nj , "N_{#scale[0.2]{ }jet} #geq 9");
+
+  // Nb separation lines
+  TLine *tl_nb = new TLine();
+  tl_nb->SetLineStyle(3);
+  float lm_nb = 0.77;
+  tl_nb->DrawLine( 7.-0.5,min, 7.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(13.-0.5,min,13.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(19.-0.5,min,19.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(31.-0.5,min,31.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(37.-0.5,min,37.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(43.-0.5,min,43.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(55.-0.5,min,55.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(61.-0.5,min,61.-0.5,max*lm_nb); 
+  tl_nb->DrawLine(67.-0.5,min,67.-0.5,max*lm_nb); 
+    
+  // Nb labels
+  TLatex * ttext_nb = new TLatex();
+  ttext_nb->SetTextFont(42);
+  ttext_nb->SetTextSize(0.045);
+  ttext_nb->SetTextAlign(22);
+    
+  float tm_nb = 0.78;
+  ttext_nb->DrawLatex( 4.75   , max*tm_nb*1.1 , "N_{#scale[0.2]{ }b-jet}");
+  ttext_nb->DrawLatex( 4.-0.5 , max*tm_nb , "0");
+  ttext_nb->DrawLatex(10.-0.5 , max*tm_nb , "1");
+  ttext_nb->DrawLatex(16.-0.5 , max*tm_nb , "2");
+  ttext_nb->DrawLatex(22.-0.5 , max*tm_nb , "#geq 3");
+
+}
 
 void DrawTree::drawText() {
   if ( textinside_ == "" ) return;
@@ -646,8 +722,7 @@ void DrawTree::plot(TString plotopt) {
   if ( drawratio_ && !(hasdata_ && isThereData()) ) { 
     if ( thebgmc_.size() == 2 ) { 
       drawratio_ = true; 
-      myp("\n\nDrawing ratio plot with MC\n");
-      pts(vInfo);
+      myp("\n\nDrawing ratio plot with MC\n"); pts(vInfo);
     }
     else {
       if ( isThereData() ) myp("\n\nWARNING: Parameter 'hasdata' not set to true. Not drawing 'Data' or Data/MC ratio plot.\n");
@@ -659,8 +734,7 @@ void DrawTree::plot(TString plotopt) {
   TString canvasOpt = drawratio_ ? "ratio" : "";
   const int mainPadIndex = drawratio_ ? 1 : 0; 
 
-  myp("\n\n");
-  pts(vInfo);
+  myp("\n\n"); pts(vInfo);
 
   int varnum = 0;
   ++plotnumber_ ;
@@ -668,11 +742,14 @@ void DrawTree::plot(TString plotopt) {
   //Loop over all vars (even if its just one)
   for (std::vector<ToPlot>::iterator var = thevar_.begin(); var != thevar_.end(); ++var, ++varnum ) {
 
+    //TDatime plottime;
+    //int start = plottime.Convert();
+    TStopwatch sw ;
+    sw.Start() ;
     bool isempty = false;
     TString s_varnum = "_"; s_varnum += plotnumber_; s_varnum += "_"; s_varnum += varnum;
 
-    myp("\n============  Plotting  ---> %s <---   ============\n\n",var->getVarname().Data());
-    pts(vError);
+    myp("\n====================  Plotting  ---> %s <---   ====================\n\n",var->getVarname().Data()); pts(vError);
     
     renewCanvas(canvasOpt);
     renewLegend();
@@ -695,7 +772,7 @@ void DrawTree::plot(TString plotopt) {
       if ( ratiolin_ != 0 ) delete ratiolin_;
       ratiolin_ = new TLine(var->getXlow(), 1, var->getXhigh(), 1);
     }
-    TH1D * hblank = new TH1D("hblank","hblank",var->getNxbins(),var->getXlow(),var->getXhigh());
+    TH1D * hblank = new TH1D("hblank","",var->getNxbins(),var->getXlow(),var->getXhigh());
 
     //TODO: Hardcoded values.. could probably open this up to the user 
     totalsm_->SetMarkerColor(vSharkBlue);
@@ -763,8 +840,7 @@ void DrawTree::plot(TString plotopt) {
 
     }//thebgmc loop
     if ( dostack_ ) {
-      myp("%10s passed events: %10.0f raw, %10f weighted***\n\n","***Total SM",totalsm_->GetEntries(),totalsm_->Integral(0,totalsm_->GetNbinsX()+1));
-      pts(vError);
+      myp("%10s passed events: %10.0f raw, %10f weighted***\n\n","***Total SM",totalsm_->GetEntries(),totalsm_->Integral(0,totalsm_->GetNbinsX()+1)); pts(vError);
     }
 
     for (std::vector<Dataset>::iterator ds = thesigmc_.begin(); ds != thesigmc_.end(); ++ds, ++dsnum) {
@@ -849,22 +925,14 @@ void DrawTree::plot(TString plotopt) {
       double smmcint = totalsm_->Integral(0,totalsm_->GetNbinsX()+1);
       if ( smmcint > 0. ) datamcratio = dataint/smmcint;
 
-      myp("\n\n\t ------------------------ Statistical Test: Data vs MC -----------------------  \n");
-      pts(vError);
-      myp("\t| Integral of data, total SM (ratio): \n");
-      pts(vError);
-      myp("\t| \t%f / %f = %f  \n",dataint,smmcint,datamcratio);
-      pts(vError);
-      myp("\t| Chi^2 Test results: \n");
-      pts(vError);
-      myp("\t| \tprob=%f; Chi2=%f; ndof=%d; Chi2/ndof=%f; igood=%d\n",pval,chi2,ndof,chi2/ndof,igood);
-      pts(vError);
-      myp("\t| Kolmogorov Test results: (prob << 1 means not compatible) \n");
-      pts(vError);
-      myp("\t| \tprob=%f ; prob (w/o \"N\")=%f \n",ktestn,ktest);
-      pts(vError);
-      myp(" \t -----------------------------  End Stats Tests  -----------------------------  \n\n");
-      pts(vError);
+      myp("\n\n\t ------------------------ Statistical Test: Data vs MC -----------------------  \n"); pts(vError);
+      myp("\t| Integral of data, total SM (ratio): \n"						    ); pts(vError);
+      myp("\t| \t%f / %f = %f  \n",dataint,smmcint,datamcratio					    ); pts(vError);
+      myp("\t| Chi^2 Test results: \n"								    ); pts(vError);
+      myp("\t| \tprob=%f; Chi2=%f; ndof=%d; Chi2/ndof=%f; igood=%d\n",pval,chi2,ndof,chi2/ndof,igood); pts(vError);
+      myp("\t| Kolmogorov Test results: (prob << 1 means not compatible) \n"			    );pts(vError);
+      myp("\t| \tprob=%f ; prob (w/o \"N\")=%f \n",ktestn,ktest					    ); pts(vError);
+      myp("\t  -----------------------------  End Stats Tests  -----------------------------  \n\n" ); pts(vError);
     }
 
     //Draw everything
@@ -978,8 +1046,7 @@ void DrawTree::plot(TString plotopt) {
       if      ( hasdata_             ) ratio_->Divide(thedata_.begin()->getHist(),totalsm_);
       else if ( thebgmc_.size() == 2 ) ratio_->Divide(thebgmc_.begin()->getHist(),(thebgmc_.begin()+1)->getHist());
       else {
-        myp("Attempting to draw ratio plot but don't know what samples to use, please check datasets. Exiting.");
-        pts(vError);
+        myp("Attempting to draw ratio plot but don't know what samples to use, please check datasets. Exiting."); pts(vError);
         exit(0);
       }
       ratio_->SetMinimum(ratiomin_);
@@ -1019,13 +1086,21 @@ void DrawTree::plot(TString plotopt) {
     //Save it, somewhere. 
     int hold = gErrorIgnoreLevel;
     gErrorIgnoreLevel = 2000;
-    if ( savegraph1_ ) thecan_->SaveAs(getSaveName1(var->getVarname()+s_varnum));
+    if ( savegraph1_ ) { 
+      if ( var->getPlotname() == "" ) thecan_->SaveAs(getSaveName1(var->getVarname()+s_varnum));
+      else                            thecan_->SaveAs(getSaveName1(var->getPlotname()        ));
+    }
     if ( savegraph2_ ) thecan_->Print(getSaveName2(0));
     if ( savegraph3_ ) fileout_->Write();
     gErrorIgnoreLevel = hold;
 
     hblank->Clear();
     hblank->Reset();
+
+    int t = sw.RealTime() ;
+    TString print;
+    print.Form("=============== Finished plotting var, %s, in %02.0f:%02.0f ==============\n\n", var->getVarname().Data(), (double)(t/60),(double)(t%60));
+    myp("%s",print.Data()); pts(vError);
 
   }//thevar loop
 
@@ -1039,10 +1114,23 @@ void DrawTree::autoAddDatasets(TString path, TString what, TString back) {
   
 
   //BG MC
+  if ( what.Contains("other") || what == "" ) {
+    Dataset ds1(path+front+"ttHJetTobb_*"+back+trig,"Other",vArgentineBlue,1,treename_);
+    ds1.addFile(path+front+"TTZTo*-*"+back+trig);
+    ds1.addFile(path+front+"TTWJetsTo*-*"+back+trig);
+    ds1.addFile(path+front+"ZH_*-*"+back+trig);
+    ds1.addFile(path+front+"WH_*-*"+back+trig);
+    ds1.addFile(path+front+"WWTo*-*"+back+trig);
+    ds1.addFile(path+front+"WZTo*-*"+back+trig);
+    ds1.addFile(path+front+"ZZTo*-*"+back+trig);
+    ds1.addFile(path+front+"TTTT-*"+back+trig);
+    ds1.addFile(path+front+"WWZ-*"+back+trig);
+    ds1.addFile(path+front+"WZZ-*"+back+trig);
+    ds1.addFile(path+front+"ZZZ-*"+back+trig);
+    thebgmc_.push_back(ds1);
+  }
   if ( what.Contains("singlet") || what == "" ) {
-    Dataset ds(path+front+"ST_t-channel_*"+back+trig,"Singlet",vKingsPurple,1,treename_);
-    ds.addFile(path+front+"ST_tW_*"+back);
-    ds.addFile(path+front+"ST_s-channel*"+back);
+    Dataset ds(path+front+"ST_*"+back+trig,"Singlet",vKingsPurple,1,treename_);
     thebgmc_.push_back(ds);
   }
   if ( what.Contains("wjets") || what == "" ) {
@@ -1051,7 +1139,7 @@ void DrawTree::autoAddDatasets(TString path, TString what, TString back) {
   if ( what.Contains("zinv") || what.Contains("zjets") || what == "" ) {
     thebgmc_.push_back(Dataset(path+front+"ZJetsToNuNu_HT-*"+back+trig,"ZJets",vNinerRed,1,treename_)); //StanfordRed w/lostlep?
   }
-  if ( what.Contains("fullqcd") || what == "" ) {
+  if ( what.Contains("allqcd") || what == "" ) {
     thebgmc_.push_back(Dataset(path+front+"QCD_HT-*"+back+trig,"QCD",vWarriorYellow,1,treename_));
   }
   if ( what.Contains("indqcd") ) {
@@ -1066,17 +1154,27 @@ void DrawTree::autoAddDatasets(TString path, TString what, TString back) {
     thebgmc_.push_back(ds4); thebgmc_.push_back(ds5); thebgmc_.push_back(ds6);
     thebgmc_.push_back(ds7); 
   }
-  if ( what.Contains("ttbar") || what == "" ) {
-    thebgmc_.push_back(Dataset(path+front+"TTJets_inc*"+back+trig,"ttbar",vQuakesBlue,1,treename_));
+  if ( what.Contains("ttbar-ind") || what == "" ) {
+    thebgmc_.push_back(Dataset(path+front+"TTJets-skim*"+back+trig,"ttbar",vQuakesBlue,1,treename_));
   }
   if ( what.Contains("ttbar-full") || what == "" ) {
     thebgmc_.push_back(Dataset(path+front+"TTJets_FULL*"+back+trig,"ttbar",vQuakesBlue,1,treename_));
   }
   if ( what.Contains("lostlep") ) {
-    Dataset ds(path+front+"ST_t-channel_*"+back+trig,"Lost lep",vArgentineBlue,1,treename_);
-    ds.addFile(path+front+"ST_tW_*"+back);
-    ds.addFile(path+front+"ST_s-channel*"+back);
-    ds.addFile(path+front+"TTJets_inc*"+back);
+    Dataset ds(path+front+"ST_*"+back+trig+"#(@GenTaus->size()==0)","Lost lep",vArgentineBlue,1,treename_);
+    //ds.addFile(path+front+"ST_tW_*"+back);
+    //ds.addFile(path+front+"ST_s-channel*"+back);
+    ds.addFile(path+front+"TTJets-skim*"+back);
+    //ds.addFile(path+front+"TTJets_FULL*"+back);
+    ds.addFile(path+front+"WJetsToLNu_HT-*"+back);
+    thebgmc_.push_back(ds);
+  }
+  if ( what.Contains("hadtau") ) {
+    Dataset ds(path+front+"ST_*"+back+trig+"#(@GenTaus->size()>0)","Had tau",vOregonGreen,1,treename_);
+    //ds.addFile(path+front+"ST_tW_*"+back);
+    //ds.addFile(path+front+"ST_s-channel*"+back);
+    ds.addFile(path+front+"TTJets-skim*"+back);
+    //ds.addFile(path+front+"TTJets_FULL*"+back);
     ds.addFile(path+front+"WJetsToLNu_HT-*"+back);
     thebgmc_.push_back(ds);
   }
@@ -1084,10 +1182,22 @@ void DrawTree::autoAddDatasets(TString path, TString what, TString back) {
     Dataset ds(path+front+"ST_t-channel_*"+back+trig,"Total SM",vArgentineBlue,1,treename_);
     ds.addFile(path+front+"ST_tW_*"+back);
     ds.addFile(path+front+"ST_s-channel*"+back);
-    ds.addFile(path+front+"TTJets_inc*"+back);
+    ds.addFile(path+front+"TTJets_FULL*"+back);
     ds.addFile(path+front+"WJetsToLNu_HT-*"+back);
     ds.addFile(path+front+"ZJetsToNuNu_HT-*"+back);
     ds.addFile(path+front+"QCD_HT-*"+back);
+    ds.addFile(path+front+"ttHJetTobb_*"+back+trig);
+    ds.addFile(path+front+"TTZTo*-*"+back+trig);
+    ds.addFile(path+front+"TTWJetsTo*-*"+back+trig);
+    ds.addFile(path+front+"ZH_*-*"+back+trig);
+    ds.addFile(path+front+"WH_*-*"+back+trig);
+    ds.addFile(path+front+"WWTo*-*"+back+trig);
+    ds.addFile(path+front+"WZTo*-*"+back+trig);
+    ds.addFile(path+front+"ZZTo*-*"+back+trig);
+    ds.addFile(path+front+"TTTT-*"+back+trig);
+    ds.addFile(path+front+"WWZ-*"+back+trig);
+    ds.addFile(path+front+"WZZ-*"+back+trig);
+    ds.addFile(path+front+"ZZZ-*"+back+trig);
     thebgmc_.push_back(ds);
   }
 
@@ -1116,7 +1226,7 @@ void DrawTree::autoAddDatasets(TString path, TString what, TString back) {
   if ( what.Contains("data") || what == "" ) {
     // The "#PassTrigger" adds that as a specific selection to the dataset
     Dataset ds(path+front+"HTMHT_re2015C-skim.root#PassTrigger","Data",kBlack,kFullCircle,1,1,1,treename_); 
-    ds.addFile(path+front+"HTMHT_*2015D-skim.root");
+    ds.addFile(path+front+"HTMHT_*2015D*-skim.root");
     thedata_.push_back(ds);
   }
 
@@ -1191,6 +1301,241 @@ void DrawTree::Nminus1plots(ToPlot tp, TString token) {
   plot();
 }
 
+
+void DrawTree::plotInSB(TString plotopt) {
+
+  TStopwatch sw ;
+  sw.Start() ;
+
+  if ( drawratio_ && !(hasdata_ && isThereData()) ) { 
+    if ( thebgmc_.size() == 2 ) { 
+      drawratio_ = true; 
+      myp("\n\nDrawing ratio plot with MC\n"); pts(vInfo);
+    }
+    else {
+      if ( isThereData() ) myp("\n\nWARNING: Parameter 'hasdata' not set to true. Not drawing 'Data' or Data/MC ratio plot.\n");
+      else myp("\n\nWARNING: No 'Data' is added to plot. Please add this Dataset in order to draw it. Not drawing Data/MC ratio plot.\n");
+      pts(vWarning);
+      drawratio_ = false;
+    }
+  }
+  TString canvasOpt = drawratio_ ? "ratio" : "";
+  const int mainPadIndex = drawratio_ ? 1 : 0; 
+  plotopt += "";
+
+  myp("\n\n"); pts(vInfo);
+
+  int varnum = 0;
+  ++plotnumber_ ;
+  const int sbnum = thevar_.size();
+  TH1D * dummy = new TH1D("dummy","",sbnum,0+0.5,sbnum+0.5);
+  TH1D * hblank = (TH1D*) dummy->Clone("hblank");
+  std::vector<TH1D*> theplots;
+
+  for (std::vector<Dataset>::iterator ds = thebgmc_.begin(); ds != thebgmc_.end(); ++ds) {
+    TH1D * bgplot = (TH1D*) dummy->Clone(ds->getLegname());
+    theplots.push_back(bgplot);
+  }
+
+  //Loop over all vars (even if its just one)
+  for (std::vector<ToPlot>::iterator var = thevar_.begin(); var != thevar_.end(); ++var, ++varnum ) {
+
+    TString s_varnum = "_"; s_varnum += plotnumber_; s_varnum += "_"; s_varnum += varnum;
+
+    myp("\n============  Plotting  ---> %s <--- Bin%i ============\n\n",var->getVarname().Data(),varnum+1); pts(vError);
+    
+    renewCanvas(canvasOpt);
+    renewLegend();
+
+    thecan_->cd(mainPadIndex);
+    if ( useredxtitle_ ) var->makeSimpleXtitle();
+    if ( var->getNxbins() <= 0 ) var->assignAxisLimits("X");
+
+    if ( dostack_ ) {
+      if ( thestack_ != 0 ) delete thestack_;
+      thestack_ = new THStack("thestack","--");
+    }
+    if ( totalsm_ != 0 ) delete totalsm_;
+    totalsm_ = new TH1D("totalsm","",var->getNxbins(),var->getXlow(),var->getXhigh()); 
+    totalsm_->Sumw2();
+    if ( drawratio_ ) {
+      if ( ratio_ != 0 ) delete ratio_;
+      ratio_ = new TH1D("ratio","",var->getNxbins(),var->getXlow(),var->getXhigh());
+      ratio_->Sumw2();
+      if ( ratiolin_ != 0 ) delete ratiolin_;
+      ratiolin_ = new TLine(var->getXlow(), 1, var->getXhigh(), 1);
+    }
+
+    //TODO: Hardcoded values.. could probably open this up to the user 
+    totalsm_->SetMarkerColor(vSharkBlue);
+    totalsm_->SetLineColor(vSharkBlue);
+    totalsm_->SetLineWidth(1);
+    totalsm_->SetMarkerStyle(kOpenCircle);
+
+    TString opt = "hist e";
+    int dsnum = 0;
+    //Loop over datasets
+    for (std::vector<Dataset>::iterator ds = thebgmc_.begin(); ds != thebgmc_.end(); ++ds, ++dsnum) {
+      TString s_dsnum = s_varnum; s_dsnum += "_"; s_dsnum += dsnum;
+      if      ( hasdata_ && !luminorm_ )
+        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNxbins(),var->getXlow(),var->getXhigh());
+      else if ( hasdata_ ||  luminorm_ )
+        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,luminame_,lumi_),var->getNxbins(),var->getXlow(),var->getXhigh());
+      else
+        ds->project(var->getVarname()+s_dsnum,var->getVarname(),var->getFullCut(*ds,""),var->getNxbins(),var->getXlow(),var->getXhigh());
+
+      if ( addoverflow_ ) ds->addOverflow();
+
+      ds->getHist()->SetXTitle(var->getXtitle());
+      ds->getHist()->SetYTitle(var->getYtitle());
+      ds->getHist()->GetXaxis()->SetLabelOffset(xlabeloffset_);
+      ds->getHist()->GetXaxis()->SetTitleOffset(xtitleoffset_);
+      if ( dostack_ ) ds->setHistFillColor();
+      else            ds->setHistLineAndMarkColor();
+      //Somewhat hacky.. but empty hists still have 1 entry. Why?
+      if ( ds->getHist()->GetEntries() > 1 ) totalsm_->Add(ds->getHist());
+
+      theplots[dsnum]->SetBinContent(varnum+1,ds->getFullEntries());
+    }//thebgmc loop
+    if ( dostack_ ) {
+      myp("%10s passed events: %10.0f raw, %10f weighted***\n\n","***Total SM",totalsm_->GetEntries(),totalsm_->Integral(0,totalsm_->GetNbinsX()+1)); pts(vError);
+    }
+
+    //Special, unique user functions
+    //-
+    if ( plotopt.Contains("norm") ) {
+      dsnum = 0;
+      for (std::vector<Dataset>::iterator ds = thebgmc_.begin(); ds != thebgmc_.end(); ++ds, ++dsnum) {
+        theplots[dsnum]->SetBinContent(varnum+1,ds->getFullEntries()/totalsm_->Integral(0,totalsm_->GetNbinsX()+1));
+      }
+    }
+    //-
+
+
+  }//thevar loop
+
+  //Setup the legend
+  //Data first, then BG MC, then Signal
+  //Loop through backwards
+  int dsnum = 0;
+  for (std::vector<Dataset>::iterator ds = thebgmc_.begin(); ds != thebgmc_.end(); ++ds, ++dsnum) {
+    theplots[dsnum]->SetFillColor(ds->getColor());
+    thestack_->Add(theplots[dsnum]);
+  }
+  for (std::vector<TH1D *>::iterator ds = theplots.begin(); ds != theplots.end(); ++ds) {
+    theleg_->AddEntry(*ds,(*ds)->GetName(),"F");
+  }
+
+  if ( histmax_ > 0 ) hblank->SetMaximum(histmax_);
+  if ( histmin_ > 0 ) hblank->SetMinimum(histmin_);
+
+  hblank->Draw("hist"); // Draw dummy hist first!
+  if ( dostack_ ) {
+    thestack_->Draw("hist same");
+    hblank->GetXaxis()->SetTitle("Search region bin number");    
+    hblank->GetXaxis()->SetLabelOffset(xlabeloffset_);
+    hblank->GetXaxis()->SetTitleOffset(xtitleoffset_);
+    hblank->GetYaxis()->SetTitle("Event Fraction ");
+    hblank->GetYaxis()->SetLabelOffset(ylabeloffset_);
+    hblank->GetYaxis()->SetTitleOffset(ytitleoffset_);
+  }
+  else {
+    for (std::vector<TH1D*>::iterator ds = theplots.begin(); ds != theplots.end(); ++ds) {
+      (*ds)->Draw("hist same lpe");
+      (*ds)->GetXaxis()->SetTitle("Search region bin number");    
+      (*ds)->GetXaxis()->SetLabelOffset(xlabeloffset_);
+      (*ds)->GetXaxis()->SetTitleOffset(xtitleoffset_);
+      (*ds)->GetYaxis()->SetTitle("Event Fraction ");
+      (*ds)->GetYaxis()->SetLabelOffset(ylabeloffset_);
+      (*ds)->GetYaxis()->SetTitleOffset(ytitleoffset_);
+      //ds->getHist()->SetMinimum(hmin);
+      //ds->getHist()->SetMaximum(hmax);
+      hblank->GetXaxis()->SetTitle("Search region bin number");    
+      hblank->GetXaxis()->SetLabelOffset(xlabeloffset_);
+      hblank->GetXaxis()->SetTitleOffset(xtitleoffset_);
+      hblank->GetYaxis()->SetTitle("Event Fraction ");
+      hblank->GetYaxis()->SetLabelOffset(ylabeloffset_);
+      hblank->GetYaxis()->SetTitleOffset(ytitleoffset_);
+    }
+  }
+
+  hblank->SetLineWidth(1);
+  hblank->Draw("axis same");
+     
+  // Draw other things on top of the plot 
+  //   
+      
+  //if ( thethevar_.begin()_.begin()->getText() != "" ) {
+  //  textinside2_ = thethevar_.begin()_.begin()->getText() ;
+  //}
+  drawSBText(histmin_,histmax_);
+  if ( drawleg_           ) theleg_->Draw ();
+  if ( drawlatex_         ) drawPlotHeader();
+  if ( ptext_       !=  0 ) ptext_->Draw  ();
+  if ( textinside_  != "" ) drawText()      ;
+  if ( textinside2_ != "" ) drawExtraText() ;
+ 
+  //Draw a Data/MC plot at bottom of canvas
+      /*
+    if ( drawratio_ ) {
+      thecan_->cd(2);
+      if      ( hasdata_             ) ratio_->Divide(thedata_.begin()->getHist(),totalsm_);
+      else if ( thebgmc_.size() == 2 ) ratio_->Divide(thebgmc_.begin()->getHist(),(thebgmc_.begin()+1)->getHist());
+      else {
+        myp("Attempting to draw ratio plot but don't know what samples to use, please check datasets. Exiting."); pts(vError);
+        exit(0);
+      }
+      ratio_->SetMinimum(ratiomin_);
+      ratio_->SetMaximum(ratiomax_);
+
+      ratio_->SetLineColor(1);
+      ratio_->SetLineStyle(1);
+      ratio_->SetLineWidth(1);
+      ratio_->SetMarkerColor(1);
+      ratio_->SetMarkerStyle(8);
+      ratio_->SetMarkerSize(0.5);
+
+      ratio_->GetYaxis()->SetNdivisions(500 + int(ratiomax_-ratiomin_)+2);
+ 
+      ratio_->GetXaxis()->SetTitle(thevar_.begin()->getXtitle()); 
+      ratio_->GetXaxis()->SetTitleSize(0.14);
+      ratio_->GetXaxis()->SetLabelSize(0.09); //make y label bigger, orig 0.1
+      ratio_->GetXaxis()->SetLabelOffset(0.008);
+      ratio_->GetXaxis()->SetTitleOffset(xtitleoffset_-.39);
+      ratio_->GetYaxis()->SetTitle(ratioytitle_);
+      ratio_->GetYaxis()->SetTitleSize(0.10);
+      ratio_->GetYaxis()->SetTitleOffset(0.55);
+      ratio_->GetYaxis()->SetLabelSize(0.09);//0.08 
+
+      gPad->SetTopMargin(1e-5);
+      gPad->SetTickx();
+      gPad->Modified();     
+
+      ratio_->Draw("peX0");
+      //Add line at ratio of 1
+      ratiolin_->SetLineStyle(2);
+      ratiolin_->Draw("same");
+    }
+*/
+    //Save it, somewhere. 
+    int hold = gErrorIgnoreLevel;
+    gErrorIgnoreLevel = 2000;
+    ///if ( savegraph1_ ) thecan_->SaveAs(getSaveName1(var->getVarname()+s_varnum));
+    if ( savegraph2_ ) thecan_->Print(getSaveName2(0));
+    if ( savegraph3_ ) fileout_->Write();
+    gErrorIgnoreLevel = hold;
+
+    hblank->Clear();
+    hblank->Reset();
+
+    int t = sw.RealTime() ;
+    TString print;
+    print.Form("=============== Finished plotting 72SB in %02.0f:%02.0f ==============\n\n", (double)(t/60),(double)(t%60));
+    myp("%s",print.Data()); pts(vError);
+
+}
+
+
 //Make a cutflow table
 //Print out to screen if not saving to file, always
 //
@@ -1212,8 +1557,7 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
   if ( !doraw  ) precision = 3;
   if (  dolumi ) { lumiweight = "*" + luminame_ + "*"; lumiweight+=lumi_; } 
   if ( dolatex  && strfile == "" ) {
-    myp("Requesting LaTeX table without output file supplied. This is a requirement. Exiting\n");
-    pts(vError);
+    myp("Requesting LaTeX table without output file supplied. This is a requirement. Exiting\n"); pts(vError);
     exit(0);
   } 
 
@@ -1276,8 +1620,7 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
   std::vector<double> ds_vals1;  
   std::vector<double> ds_vals2; 
   if ( strnames != "" && nnames < (ncuts+ncuts2) ) {
-    myp("Warning: There are less cut names given than are total cuts to make. Will not use names.\n");
-    pts(vWarning);
+    myp("Warning: There are less cut names given than are total cuts to make. Will not use names.\n"); pts(vWarning);
     use_names = false;
   }
 
@@ -1510,8 +1853,7 @@ void DrawTree::sens_table(Dataset bg, TString strcuts, TString strweight, TStrin
 
   lumiweight = "*" + luminame_ + "*"; lumiweight+=lumi_; 
   if ( dolatex  && strfile == "" ) {
-    myp("Requesting LaTeX table without output file supplied. This is a requirement. Exiting\n");
-    pts(vError);
+    myp("Requesting LaTeX table without output file supplied. This is a requirement. Exiting\n"); pts(vError);
     exit(0);
   } 
 
@@ -1541,8 +1883,7 @@ void DrawTree::sens_table(Dataset bg, TString strcuts, TString strweight, TStrin
     isens = 4;
   }
   else {
-    myp("Error: Do not know which sensitivity variable to calculate. Exiting\n");
-    pts(vError);
+    myp("Error: Do not know which sensitivity variable to calculate. Exiting\n"); pts(vError);
     exit(0);
   }
 
@@ -1555,8 +1896,8 @@ void DrawTree::sens_table(Dataset bg, TString strcuts, TString strweight, TStrin
     ofs.open(strfile);
   }
 
-  myp("\n\n\n==>> Signal Sensitivity table <<==\n\n\n"); pts(vError);
-  myp("Settings\n"); pts(vError);
+  myp("\n\n\n==>> Signal Sensitivity table <<==\n\n\n"   ); pts(vError);
+  myp("Settings\n");                                        pts(vError);
   myp("---------------------------------------------\n"  ); pts(vError);
   myp("Save to file    : %s\n"   , BOOL_STR(strfile!="") ); pts(vError);
   myp("Sensitivity Var : %s\n"   , sens.Data()           ); pts(vError); 
@@ -1587,8 +1928,7 @@ void DrawTree::sens_table(Dataset bg, TString strcuts, TString strweight, TStrin
   int ncuts  = cuts1.size();
   int nnames = names.size();
   if ( strnames != "" && nnames < (ncuts) ) {
-    myp("Warning: There are less cut names given than are total cuts to make. Will not use names.\n");
-    pts(vWarning);
+    myp("Warning: There are less cut names given than are total cuts to make. Will not use names.\n"); pts(vWarning);
     use_names = false;
   }
 
@@ -1764,8 +2104,13 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
   float mdpcut = 5;
 
   renewLegend(0.68,0.05,0.90,0.40);
+  if ( !hasdata_ ) renewLegend(0.68,0.29,0.90,0.59);
   if ( ptext_ != 0 ) delete ptext_;
   ptext_ = new TPaveText(0.50,0.55,0.90,0.89,"brNDC");
+  if ( !hasdata_ ) { 
+    delete ptext_;
+    ptext_ = new TPaveText(0.45,0.66,0.90,0.89,"brNDC");
+  }
   ptext_->SetBorderSize(1); //0 for no line
   ptext_->SetFillColor(0); //Set color to white
   ptext_->SetFillStyle(4000); //Set style to transparent
@@ -1780,7 +2125,8 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
 
   text.Form(" #Delta#phi  High/Low Ratio ");
   ptext_->AddText(text);
-  ptext_->AddLine(0.,0.79,1.,0.79);
+  if ( hasdata_ ) ptext_->AddLine(0.,0.79,1.,0.79);
+  else ptext_->AddLine(0.,0.74,1.,0.74);
 
   TH1D * totalbg = new TH1D("totalbg","",var.getNxbins(),var.getXlow(),var.getXhigh());
   TH1D * justqcd = new TH1D("justqcd","",var.getNxbins(),var.getXlow(),var.getXhigh());
@@ -1805,7 +2151,7 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
 
     delete h;
   }//thebgmc loop
-  for (std::vector<Dataset>::iterator ds = thedata_.begin(); ds != thedata_.end(); ++ds, ++dsnum) {
+  for (std::vector<Dataset>::iterator ds = thedata_.begin(); hasdata_ && ds != thedata_.end(); ++ds, ++dsnum) {
     TString s_dsnum = "table"; s_dsnum += "_"; s_dsnum += dsnum;
 
     alldata = ds->project_ret(var.getVarname()+s_dsnum,var.getVarname(),var.getFullCut(*ds,""),var.getNxbins(),var.getXlow(),var.getXhigh(),print);
@@ -1819,11 +2165,12 @@ void DrawTree::makeMDP_HiLo_Table2(ToPlot tp) {
   text.Form("QCD: #frac{%5.2f}{%5.2f} = %1.3f #pm %0.3f",qcd_hi,qcd_lo,qcd_ratio,qcd_ratioerr);
   //text.Form("QCD: #frac{%5.2f#pm%3.2f}{%5.2f#pm%3.2f} = %1.3f#pm%0.3f",qcd_hi,qcd_hierr,qcd_lo,qcd_loerr,qcd_ratio,qcd_ratioerr);
   ptext_->AddText(text);  
-  GetHistRatio(alldata, mdpcut, data_ratio, data_ratioerr, data_lo, data_loerr, data_hi, data_hierr);
-  text.Form("Data: #frac{%.0f}{%.0f} = %1.3f #pm %0.3f",data_hi,data_lo,data_ratio,data_ratioerr);
-  //text.Form("Data: #frac{%.0f#pm%3.2f}{%.0f#pm%3.2f} = %1.3f#pm%0.3f",data_hi,data_hierr,data_lo,data_loerr,data_ratio,data_ratioerr);
-  ptext_->AddText(text);
-
+  if ( hasdata_ ) {
+    GetHistRatio(alldata, mdpcut, data_ratio, data_ratioerr, data_lo, data_loerr, data_hi, data_hierr);
+    text.Form("Data: #frac{%.0f}{%.0f} = %1.3f #pm %0.3f",data_hi,data_lo,data_ratio,data_ratioerr);
+    //text.Form("Data: #frac{%.0f#pm%3.2f}{%.0f#pm%3.2f} = %1.3f#pm%0.3f",data_hi,data_hierr,data_lo,data_loerr,data_ratio,data_ratioerr);
+    ptext_->AddText(text);
+  }
 }
 
 int DrawTree::findSearchBin(double ht, double mht, int njets, int nbjets) {
