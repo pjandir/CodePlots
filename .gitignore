@@ -1,0 +1,7 @@
+#
+# The ignore rules for the package
+#
+*.d
+*.so
+*.cxx
+*.pcm
