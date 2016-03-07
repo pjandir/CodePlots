@@ -77,15 +77,16 @@ void Color::plotTheColors() {
   int lcolor = kBlack;
   int lwidth = 3;
   //Logic for a RxC grid of colors
+  //  - For now keep only 3 columns, as there are not enough colors to justify a fourth column
   int ncolors = mycolors.size();
-  int rows    = 3;
-  int columns = ncolors / rows;
-  columns = ncolors % rows == 0 ? columns : columns + 1;
+  int columns = 3;
+  int rows  = ncolors / columns;
+  rows = ncolors % columns == 0 ? rows : rows + 1;
 
   //Create objects
   for ( std::vector<Color>::const_iterator itr = mycolors.begin() ; itr != mycolors.end() ; ++itr) {
     TString name = "hist"; name += itr->getId();
-    hists.push_back(new TH2I(name.Data(),name.Data(),rows,0,rows*10,columns,0,columns*5));
+    hists.push_back(new TH2I(name.Data(),name.Data(),columns,0,columns*10,rows,0,rows*5));
   }
   //Create lines to separate the boxes
   TH2I * first = * hists.begin();
@@ -101,8 +102,8 @@ void Color::plotTheColors() {
   //Stylize the objects
   int bin = 0, binx = 1, biny = 0;
   for ( std::vector<TH2I *>::const_iterator itr = hists.begin() ; itr != hists.end() ; ++itr) {
-    if   ( (bin)%rows==0 ) { binx = 1; ++biny; }
-    else                   {           ++binx; }
+    if   ( (bin)%columns==0 ) { binx = 1; ++biny; }
+    else                      {           ++binx; }
     (*itr)->SetBinContent(binx,biny,mycolors[bin].getId()); 
     (*itr)->SetFillColor(mycolors[bin].getId()); 
     (*itr)->SetTitle("Custom Colors");
