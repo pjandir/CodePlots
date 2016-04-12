@@ -24,8 +24,8 @@ Dataset::Dataset(TString n, TString l, int c, int ms, int ls, double w, double s
   // Constructor stuff
   h_ = 0;
   h2D_ = 0;
-  label_.ReplaceAll(")","");
-  label_.ReplaceAll("(","");
+  //label_.ReplaceAll(")","");
+  //label_.ReplaceAll("(","");
   label_.ReplaceAll(",","");
   label_.ReplaceAll("]","");
   label_.ReplaceAll("[","");
@@ -163,6 +163,7 @@ void Dataset::setLegname() {
     mlsp.Remove(a2);
     TString res = model;
     legname_ += model; legname_ += " ["; legname_ += mgl; legname_ += ","; legname_ += mlsp; legname_ += "]"; 
+    legname_ = label_;
   }
   else if ( copy.Contains("t2") && !copy.Contains("qcd") ) {
     TString aname = rt::GetFileName(name_);
@@ -189,6 +190,10 @@ void Dataset::setLegname() {
     legname_ += model; legname_ += " ["; legname_ += mgl; legname_ += ","; legname_ += mlsp; legname_ += "]"; 
   }
   else legname_ = label_;
+  label_.ReplaceAll("/","_");
+  label_.ReplaceAll(")","");
+  label_.ReplaceAll("(","");
+  label_.ReplaceAll(" ","");
 
 }
 

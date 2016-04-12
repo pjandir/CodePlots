@@ -386,6 +386,8 @@ void DrawTree::renewLegend() {
   theleg_->SetBorderSize((int)drawlegborder_); //Set to 1 for a line around the Legend
   theleg_->SetLineStyle(0);
   theleg_->SetTextFont(42); 
+  theleg_->SetTextSize(0.019); 
+  //theleg_->SetNColumns(2);
   theleg_->SetFillColor(0); //Pure white background in Legend i.e. not 'clear' background.
 }
 
@@ -395,6 +397,7 @@ void DrawTree::renewLegend(float x1, float y1, float x2, float y2) {
   theleg_->SetBorderSize((int)drawlegborder_); //Set to 1 for a line around the Legend
   theleg_->SetLineStyle(0);
   theleg_->SetTextFont(42); 
+  theleg_->SetNColumns(2);
   theleg_->SetFillColor(0); //Pure white background in Legend i.e. not 'clear' background.
 }
 
@@ -1094,6 +1097,8 @@ void DrawTree::plot(TString plotopt) {
     if ( savegraph3_ ) fileout_->Write();
     gErrorIgnoreLevel = hold;
 
+    textinside_  = "";
+    textinside2_ = "";
     hblank->Clear();
     hblank->Reset();
 
@@ -1253,7 +1258,7 @@ void DrawTree::Nminus1plots(ToPlot tp, TString token) {
   TString sel = tp.getSelection();
   TObjArray * array = sel.Tokenize(token.Data());
   std::vector<TString> strings;
-  std::vector<ToPlot> thetps;
+  std::vector<ToPlot>   thetps;
 
   for ( int i = 0; i <= array->GetLast(); ++i ) { 
     TObjString * str = (TObjString*) array->At(i) ;
@@ -1285,6 +1290,8 @@ void DrawTree::Nminus1plots(ToPlot tp, TString token) {
     TString two = var;
     one.Remove(a);
     two.Remove(0,a+symbol);
+    two.ReplaceAll(")","");
+    two.ReplaceAll("(","");
     if ( one.Contains("(") && !one.Contains(")") ) one += ")";
     
     thetps[j].setSelection(thetps[j].getSelection().ReplaceAll(rem,""));
