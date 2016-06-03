@@ -20,8 +20,8 @@ void Example() {
   //The object that draws it all
   DrawTree * dt = new DrawTree("tree",vError);
 
-  //Set some various options
-  //Many other options are available
+  //Set some of the various options
+  //Many other options are available - see the DrawTree header
   dt->setLogy(true);
   dt->setDrawmcerr(true);
   dt->setDostack(true);
@@ -30,7 +30,7 @@ void Example() {
   dt->setHasdata(true);
   dt->setDrawratio(true);
 
-  //Custom function to add all datasets you want
+  //Custom function to add all datasets you want in a simple, concise way
   //See function to see how to add datasets to the DrawTree object by hand
   dt->autoAddDatasets("path/to/the/root/files","fullqcd ttbar wjets singlet zinv data","*.root");
 
