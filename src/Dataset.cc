@@ -125,17 +125,11 @@ void Dataset::setLegname() {
   else if ( copy == "hadtau" ) legname_ = "#splitline{Hadronic}{#tau lepton}";
   else if ( copy == "other" ) legname_ = "Other";
   else if ( copy.Contains("t1") && !copy.Contains("qcd") ) {
-/*
-    TString aname = rt::GetFileName(name_);
-    aname.ReplaceAll("-","_");  
-    aname.ReplaceAll(".","_");  
-*/
     
     TObjArray * files1 = ch_->GetListOfFiles();
     TIter next1(files1);
     TChainElement * ele1 = 0;
     ele1 = (TChainElement*) next1();
-    ///cout << ele1->GetTitle() << " " << ele1->GetName() << endl;
     TString aname = rt::GetFileName(ele1->GetTitle());
     aname.ReplaceAll("-","_");  
     aname.ReplaceAll(".","_");  
@@ -279,7 +273,6 @@ double Dataset::getFullEntries() {
   return h_->Integral(0,h_->GetNbinsX()+1);
 }
 
-//TODO: Need to handle error bars here much, much better!
 void Dataset::addOverflow() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
@@ -476,8 +469,7 @@ TH1D * Dataset::project_ret(TString n, TString var, TString cut, int nbins, doub
     if ( label_.Contains("Data") ) { myp("\n"); rt::pts(vError); }
   }
  
-  //Have no idea why but if project is called before this one, have to re-set hist again
-  //setHistFillColor();
+  //Have no idea why but if project() is called before this one, have to re-set hist again
   setHist(h_);
   return hist;
 

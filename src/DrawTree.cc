@@ -387,7 +387,6 @@ void DrawTree::renewLegend() {
   theleg_->SetLineStyle(0);
   theleg_->SetTextFont(42); 
   theleg_->SetTextSize(0.019); 
-  //theleg_->SetNColumns(2);
   theleg_->SetFillColor(0); //Pure white background in Legend i.e. not 'clear' background.
 }
 
@@ -745,8 +744,6 @@ void DrawTree::plot(TString plotopt) {
   //Loop over all vars (even if its just one)
   for (std::vector<ToPlot>::iterator var = thevar_.begin(); var != thevar_.end(); ++var, ++varnum ) {
 
-    //TDatime plottime;
-    //int start = plottime.Convert();
     TStopwatch sw ;
     sw.Start() ;
     bool isempty = false;
@@ -945,12 +942,6 @@ void DrawTree::plot(TString plotopt) {
     if ( !isempty ) {
       if ( dostack_ ) {
         thestack_->Draw("hist same");
-        //thestack_->GetHistogram()->GetXaxis()->SetTitle(var->getXtitle());    
-        //thestack_->GetHistogram()->GetXaxis()->SetLabelOffset(xlabeloffset_);
-        //thestack_->GetHistogram()->GetXaxis()->SetTitleOffset(xtitleoffset_);
-        //thestack_->GetHistogram()->GetYaxis()->SetTitle(var->getYtitle());
-        //thestack_->GetHistogram()->GetYaxis()->SetLabelOffset(ylabeloffset_);
-        //thestack_->GetHistogram()->GetYaxis()->SetTitleOffset(ytitleoff);
         hblank->GetXaxis()->SetTitle(var->getXtitle());    
         hblank->GetXaxis()->SetLabelOffset(xlabeloffset_);
         hblank->GetXaxis()->SetTitleOffset(xtitleoffset_);
@@ -1483,7 +1474,8 @@ void DrawTree::plotInSB(TString plotopt) {
   if ( textinside2_ != "" ) drawExtraText() ;
  
   //Draw a Data/MC plot at bottom of canvas
-      /*
+  //Not implemented yet for the SB plots..
+  /*
     if ( drawratio_ ) {
       thecan_->cd(2);
       if      ( hasdata_             ) ratio_->Divide(thedata_.begin()->getHist(),totalsm_);
@@ -1523,7 +1515,8 @@ void DrawTree::plotInSB(TString plotopt) {
       ratiolin_->SetLineStyle(2);
       ratiolin_->Draw("same");
     }
-*/
+    */
+
     //Save it, somewhere. 
     int hold = gErrorIgnoreLevel;
     gErrorIgnoreLevel = 2000;

@@ -107,8 +107,6 @@ TString ToPlot::constructYtitle(const TString y, const double low, const double 
     if ( !dum.IsDigit() ) unit += dum;
   }
 
-  //if ( y.Contains("/") || y.Contains("*") ) unit = ""; 
- 
   TString fulltitle;
   fulltitle.Form(formstring.Data(), "Events", w, unit.Data());
 
@@ -126,9 +124,6 @@ TString ToPlot::getFullCut(Dataset ds, TString lumiweight, double lumi) const {
     int a1 = extraweight.Index("*");
     extraweight.Remove(0,a1);
     save.Remove(a1,save.Length());
-    //cout << ds.getExtra() << endl; 
-    //cout << extraweight << endl; 
-    //cout << save << endl;
     ds.setExtra(save);
   }
 
@@ -177,6 +172,7 @@ TString ToPlot::getFullCut(Dataset ds, TString lumiweight, double lumi) const {
   return thecut;
 }
 
+//Get a 'common' name of variable to be plotted. Used as an internal name. 
 //Add more variables as necessary 
 TString ToPlot::getCommonName(TString name) {
   
@@ -234,6 +230,7 @@ TString ToPlot::getCommonName(TString name) {
   return ret;
 }
 
+//Obtain the x-axis plotted title of the variable (using common name)
 //Add variables as necessary
 void ToPlot::makeSimpleXtitle() {
   TString title, copy;
@@ -288,6 +285,8 @@ void ToPlot::makeSimpleXtitle() {
 
 }
 
+//Function allows known ('common') variables to be given axis limits automatically
+//Add variables as necessary
 void ToPlot::assignAxisLimits(TString a) {
 
   if ( rt::ContainsMathSym(varname_) ) {
@@ -379,7 +378,7 @@ void ToPlot::assignAxisLimits(TString a) {
 
 }
 
-
+//Overload insertion operator
 std::ostream& operator<< (std::ostream & os, const ToPlot & t) {
   char out[2000];
   sprintf(out,"---ToPlot Object---\n\tSelection: %s\n\tVariable: %s\n\tXtitle: %s\tYtitle: %s\n\tBaseline: %s\n\tWeights: %s\n\tExtra: %s\n\tNXbins: %i\tXlow: %f \tXhigh: %f \tNYbins: %i \tYlow: %f \tYhigh: %f \n"
