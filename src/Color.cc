@@ -58,7 +58,7 @@ std::vector<Color> Color::init() {
 void Color::plotTheColors() {
 
   myp("Creating plot of all custom colors\n");
-  rt::pts(vInfo);
+  ep::pts(vInfo);
 
   TCanvas * can = new TCanvas("can","",400,400);
 

@@ -289,7 +289,7 @@ void ToPlot::makeSimpleXtitle() {
 //Add variables as necessary
 void ToPlot::assignAxisLimits(TString a) {
 
-  if ( rt::ContainsMathSym(varname_) ) {
+  if ( ep::ContainsMathSym(varname_) ) {
     nxbins_ = 20; xlo_ = -9.5; xhi_ = 10.5; 
     return;
   }
@@ -362,17 +362,17 @@ void ToPlot::assignAxisLimits(TString a) {
   a.ToLower();
   if      ( a == "x" ) {
     nxbins_ = nb;
-    xlo_   = xl;
-    xhi_   = xh;
+    xlo_    = xl;
+    xhi_    = xh;
   }
   else if ( a == "y" ) {
     nybins_ = nb;
-    ylo_   = xl;
-    yhi_   = xh;
+    ylo_    = xl;
+    yhi_    = xh;
   }
   else {
-    myp("Warning: Attempting to assign axis limits to unknown axis. See ToPlot.cc for more info");
-    rt::pts(vWarning);
+    myp("Warning: Attempting to assign axis limits to unknown axis. See ToPlot.cc for more info.");
+    ep::pts(vWarning);
   }
   doConstructYtitle();
 

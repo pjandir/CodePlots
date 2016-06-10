@@ -15,19 +15,19 @@ DrawTree::DrawTree(TString n, int verboselevel)
 {
 
   //Set the global verbosity level here
-  rt::verbose = verboselevel;
+  ep::verbose = verboselevel;
 
   //Init TStyle
   initStyle("CMS"); //Or 'me'
 
   // Set ROOT global error message level -- see TError.h
-  if      ( rt::verbose ==    0 ) gErrorIgnoreLevel =    0; //kPrint 
-  else if ( rt::verbose == 1000 ) gErrorIgnoreLevel = 1000; //kInfo 
-  else if ( rt::verbose == 2000 ) gErrorIgnoreLevel = 2000; //kWarning 
-  else if ( rt::verbose == 3000 ) gErrorIgnoreLevel = 3000; //kError 
-  else if ( rt::verbose == 4000 ) gErrorIgnoreLevel = 4000; //kBreak 
-  else if ( rt::verbose == 5000 ) gErrorIgnoreLevel = 5000; //kSysError 
-  else if ( rt::verbose >= 6000 ) gErrorIgnoreLevel = 6000; //kFatal 
+  if      ( ep::verbose ==    0 ) gErrorIgnoreLevel =    0; //kPrint 
+  else if ( ep::verbose == 1000 ) gErrorIgnoreLevel = 1000; //kInfo 
+  else if ( ep::verbose == 2000 ) gErrorIgnoreLevel = 2000; //kWarning 
+  else if ( ep::verbose == 3000 ) gErrorIgnoreLevel = 3000; //kError 
+  else if ( ep::verbose == 4000 ) gErrorIgnoreLevel = 4000; //kBreak 
+  else if ( ep::verbose == 5000 ) gErrorIgnoreLevel = 5000; //kSysError 
+  else if ( ep::verbose >= 6000 ) gErrorIgnoreLevel = 6000; //kFatal 
   else                            gErrorIgnoreLevel =   -1; //kUnset
 
   TString print;

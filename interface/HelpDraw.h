@@ -53,7 +53,7 @@
 #endif
 
 //Used as shorthand for sprintf into the global char array
-#define myp(...) sprintf(rt::myout,__VA_ARGS__)
+#define myp(...) sprintf(ep::myout,__VA_ARGS__)
 
 //Easy printout for bools
 #define BOOL_STR(b) ((b)?"true":"false")
@@ -66,7 +66,7 @@ enum VerbosityLevels {vPrint=0,vInfo=1000,vWarning=2000,vError=3000,vBreak=4000,
 
 //Namespace
 //Use for print out as well as other useful functions/logic
-namespace rt
+namespace ep
 {
 
   //

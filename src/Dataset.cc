@@ -12,12 +12,12 @@ Dataset::Dataset(TString n, TString l, int c, int ms, int ls, double w, double s
   //Error checks
   if ( name_ == "" ) {
     myp("Error: Dataset has been given no name! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   if ( label_ == "" ) {
     myp("Error: Dataset has been given no label! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
 
@@ -41,12 +41,12 @@ Dataset::Dataset(TString n, TString l, int c, double w, TString t)
   //Error checks
   if ( name_ == "" ) {
     myp("Error: Dataset has been given no name! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   if ( label_ == "" ) {
     myp("Error: Dataset has been given no label! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
 
@@ -93,19 +93,19 @@ void Dataset::setTree(TString treename) {
   //Error checks
   if ( !( (tree) && (!tree->IsZombie()) ) ) {
     myp("Error: TChain not loaded properly for sample [%s]! Exiting. \n\n",name_.Data());
-    rt::pts(vError); 
+    ep::pts(vError); 
     exit(0);
   }
   if ( nfiles < 1 ) {
     myp("Error: TChain did not add any files matching this name [%s]. Exiting.\n\n",name_.Data());
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
 
   TString sfile = ( nfiles == 1 ) ? "file" : "files" ; 
   ch_ = (TChain *) tree->Clone();
   myp("New Dataset created: %s\n --> Dataset [%s] has %12i entries in %3i %s\n",name_.Data(),label_.Data(),(int)ch_->GetEntries(),nfiles,sfile.Data());
-  rt::pts(vError); 
+  ep::pts(vError); 
 
 }
 
@@ -130,7 +130,7 @@ void Dataset::setLegname() {
     TIter next1(files1);
     TChainElement * ele1 = 0;
     ele1 = (TChainElement*) next1();
-    TString aname = rt::GetFileName(ele1->GetTitle());
+    TString aname = ep::GetFileName(ele1->GetTitle());
     aname.ReplaceAll("-","_");  
     aname.ReplaceAll(".","_");  
 
@@ -160,7 +160,7 @@ void Dataset::setLegname() {
     legname_ = label_;
   }
   else if ( copy.Contains("t2") && !copy.Contains("qcd") ) {
-    TString aname = rt::GetFileName(name_);
+    TString aname = ep::GetFileName(name_);
     aname.ReplaceAll("-","_");  
     aname.ReplaceAll(".","_");  
 
@@ -195,7 +195,7 @@ void Dataset::addFile(TString s) {
 
   if ( ! isTree() ) {
     myp("Error: TChain does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }  
 
@@ -203,9 +203,9 @@ void Dataset::addFile(TString s) {
   TIter next(files);
   TChainElement * ele = 0;
   while ( (ele = (TChainElement*) next() ) ) {
-    if ( rt::GetFileName(s) == rt::GetFileName(ele->GetTitle()) ) {
+    if ( ep::GetFileName(s) == ep::GetFileName(ele->GetTitle()) ) {
       myp("Error: File has already been added to this TChain! Exiting.\n\n");
-      rt::pts(vError);
+      ep::pts(vError);
       exit(0);
     }
   }
@@ -214,13 +214,13 @@ void Dataset::addFile(TString s) {
   ch_->Add(s);
   double n2 = ch_->GetEntries();
 
-  if ( rt::AreEqualAbs(n1,n2) ) {
+  if ( ep::AreEqualAbs(n1,n2) ) {
     myp("     Additional file pattern to be appended to existing dataset [%s] has zero entries --> Not added to dataset!\n",label_.Data());
-    rt::pts(vError);
+    ep::pts(vError);
   }
   else {
     myp("     Additional file pattern appended to existing dataset [%s] --> Dataset has %12i entries in %3i files\n",label_.Data(),(int)n2,int(files->GetEntries()));
-    rt::pts(vError);
+    ep::pts(vError);
   }
 
   //delete files;
@@ -230,7 +230,7 @@ void Dataset::addFile(TString s) {
 TH1D * Dataset::getHist() const {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   TH1D * ret = (TH1D *) h_->Clone();
@@ -240,7 +240,7 @@ TH1D * Dataset::getHist() const {
 TH1D * Dataset::getHist() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   return h_;
@@ -249,7 +249,7 @@ TH1D * Dataset::getHist() {
 TH2D * Dataset::getHist2D() {
   if ( !isHist2D() ) {
     myp("Error: Histogram 2D does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   return h2D_;
@@ -258,7 +258,7 @@ TH2D * Dataset::getHist2D() {
 TChain * Dataset::getTree() {
   if ( !isTree() ) {
     myp("Error: TChain does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   return ch_;
@@ -267,7 +267,7 @@ TChain * Dataset::getTree() {
 double Dataset::getFullEntries() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   return h_->Integral(0,h_->GetNbinsX()+1);
@@ -276,7 +276,7 @@ double Dataset::getFullEntries() {
 void Dataset::addOverflow() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   int nbins = h_->GetNbinsX();
@@ -287,7 +287,7 @@ void Dataset::addOverflow() {
 void Dataset::setHistLineColor() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   h_->SetLineColor(color_);
@@ -298,7 +298,7 @@ void Dataset::setHistLineColor() {
 void Dataset::setHistMarkColor() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   h_->SetMarkerColor(color_);
@@ -308,7 +308,7 @@ void Dataset::setHistMarkColor() {
 void Dataset::setHistFillColor() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   h_->SetFillColor(color_);
@@ -317,7 +317,7 @@ void Dataset::setHistFillColor() {
 void Dataset::setHistLineAndMarkColor() {
   if ( !isHist() ) {
     myp("Error: Histogram does not exist for this dataset! Exiting.\n\n");
-    rt::pts(vError);
+    ep::pts(vError);
     exit(0);
   }
   h_->SetLineColor(color_);
@@ -335,7 +335,7 @@ void Dataset::extractExtra() {
     TObjArray * substrs = name_.Tokenize("$");
     if ( substrs->At(1) == 0 || substrs->At(2) == 0 ) {
       myp("Hmm, the attempted extraction of signal masses failed. Exiting.");
-      rt::pts(vError); 
+      ep::pts(vError); 
       exit(0);
     }
 
@@ -369,7 +369,7 @@ void Dataset::extractExtra() {
     TObjArray * substrs = name_.Tokenize("#");
     if ( substrs->At(1) == 0 ) { 
       myp("Hmm, the attempted extraction of extra dataset cuts failed. Exiting.");
-      rt::pts(vError); 
+      ep::pts(vError); 
       exit(0);
     }
 
@@ -391,7 +391,7 @@ void Dataset::project(TString n, TString var, TString cut, int nbins, double lo,
   //Error checks
   if ( !isTree() ) { 
     myp("Error: TChain not loaded for sample [%s]! Exiting. \n\n",name_.Data());
-    rt::pts(vError); 
+    ep::pts(vError); 
     exit(0);
   }  
 
@@ -419,12 +419,12 @@ void Dataset::project(TString n, TString var, TString cut, int nbins, double lo,
       myp("%10s passed entries: %10.0f raw, %10f weighted [ %3.1f %% of total dataset ] \n",label_.Data(),hist->GetEntries(),hint,percent);
     else 
       myp("%10s passed entries: %10s    :    Dataset itself is empty \n",label_.Data(),"NULL");
-    rt::pts(vError);
+    ep::pts(vError);
     if ( ch_->GetEntries() > 0 ) { 
       myp("\t      => full cut:      %s\n",cut.Data());
-      rt::pts(vError);
+      ep::pts(vError);
     }
-    if ( label_.Contains("Data") ) { myp("\n"); rt::pts(vError); }
+    if ( label_.Contains("Data") ) { myp("\n"); ep::pts(vError); }
   }
   setHist(hist);
 
@@ -435,7 +435,7 @@ TH1D * Dataset::project_ret(TString n, TString var, TString cut, int nbins, doub
   //Error checks
   if ( !isTree() ) { 
     myp("Error: TChain not loaded for sample [%s]! Exiting. \n\n",name_.Data());
-    rt::pts(vError); 
+    ep::pts(vError); 
     exit(0);
   }  
 
@@ -461,12 +461,12 @@ TH1D * Dataset::project_ret(TString n, TString var, TString cut, int nbins, doub
       myp("%10s passed entries: %10.0f raw, %10f weighted [ %3.1f %% of total dataset ] \n",label_.Data(),hist->GetEntries(),hint,percent);
     else 
       myp("%10s passed entries: %10s    :    Dataset itself is empty \n",label_.Data(),"NULL");
-    rt::pts(vError);
+    ep::pts(vError);
     if ( ch_->GetEntries() > 0 ) { 
       myp("\t      => full cut:      %s\n",cut.Data());
-      rt::pts(vError);
+      ep::pts(vError);
     }
-    if ( label_.Contains("Data") ) { myp("\n"); rt::pts(vError); }
+    if ( label_.Contains("Data") ) { myp("\n"); ep::pts(vError); }
   }
  
   //Have no idea why but if project() is called before this one, have to re-set hist again
@@ -480,7 +480,7 @@ void Dataset::project2D(TString n, TString var, TString cut, int nbinsx, double 
   //Error checks
   if ( !isTree() ) { 
     myp("Error: TChain not loaded for sample [%s]! Exiting. \n\n",name_.Data());
-    rt::pts(vError); 
+    ep::pts(vError); 
     exit(0);
   }  
 
@@ -491,9 +491,9 @@ void Dataset::project2D(TString n, TString var, TString cut, int nbinsx, double 
   hist->Sumw2();
   ch_->Project(hname,var,cut);
   myp("%10s passed entries: %10.0f raw, %10f weighted\n",label_.Data(),hist->GetEntries(),hist->Integral());
-  rt::pts(vInfo);
+  ep::pts(vInfo);
   myp("\t      => full cut:      %s\n",cut.Data());
-  rt::pts(vInfo);
+  ep::pts(vInfo);
   setHist(hist);
 
 }
