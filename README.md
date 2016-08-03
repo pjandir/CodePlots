@@ -4,9 +4,9 @@ Using the ROOT framework, this is a drawing tool which will create plots (using 
 
   * the Dataset object holds and represents a single dataset (or physics process) to plot;
   * the ToPlot object is what should be plotted including selections, any extra text, etc;
-  * and the the Color object exists for the use of any custom colors the user may wish. 
+  * and the Color object exists for the use of any custom colors the user may wish. 
 
 The user should look at the test directory for example code on how to use it. In addition, the user is encouraged to modify the package in any way necessary. Many functions, particularly in ToPlot, exist to make plotting or printing of info very easy and in some cases automatic. Any bugs or issues should be reported to the owner of this package. 
 
 Please also note no ROOT input files are provided in this package; the user is resposible for the actual data that is meant to be plotted and visualized. Additional information
-on ROOT and CMS can be found here: https://root.cern.ch/ and http://cms.web.cern.ch/.  
+on ROOT and CMS can be found here: https://root.cern.ch/ and http://cms.web.cern.ch/, respectively.  
