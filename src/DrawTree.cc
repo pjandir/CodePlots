@@ -932,7 +932,7 @@ void DrawTree::plot(TString plotopt) {
       myp("\t| \tprob=%f; Chi2=%f; ndof=%d; Chi2/ndof=%f; igood=%d\n",pval,chi2,ndof,chi2/ndof,igood); pts(vError);
       myp("\t| Kolmogorov Test results: (prob << 1 means not compatible) \n"			    );pts(vError);
       myp("\t| \tprob=%f ; prob (w/o \"N\")=%f \n",ktestn,ktest					    ); pts(vError);
-      myp("\t  -----------------------------  End Stats Tests  -----------------------------  \n\n" ); pts(vError);
+      myp("\t -----------------------------  End Stats Tests  -----------------------------   \n\n" ); pts(vError);
     }
 
     //Draw everything
@@ -1538,18 +1538,19 @@ void DrawTree::plotInSB(TString plotopt) {
 
 //Make a cutflow table
 //Print out to screen if not saving to file, always
+//Note the varcut variable needs to be adjusted to a branch that is in your TTree!  
 //
 //Main cuts in cutflow, staggered cuts, weight variable cuts, output names to each cut, output file name, apply lumi?, output event yields or percentages?, output to latex?
 void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TString strnames, TString strfile, bool dolumi, bool doraw, bool dolatex) {
 
   bool relative = true; 
   TString fullcut, lumiweight; 
-  TString varcut = "NJets";
+  TString varcut = "NJet";
   double nbins = 100, xlo = 0, xhi = 100;
   char dump[1000];
   bool use_names = true, printout = false;
   ofstream ofs;
-  int          width = 10; //Width for datasets in ascii cutflow table 
+  int          width = 12; //Width for datasets in ascii cutflow table 
   int    label_width = 16; //Width for cuts in ascii cutflow table 
   int      precision =  3; //Numbers after decimal point for lumi counts and percentages
 
@@ -1581,7 +1582,7 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
   if ( dolumi ) { 
   myp("Luminosity [pb] : %.1f\n" , lumi_                 ); pts(vError); }
   myp("Raw event yield : %s\n"   , BOOL_STR(doraw  )     ); pts(vError);
-  myp("Latex output    : %s\n"   , BOOL_STR(dolatex)     ); pts(vError);
+  myp("LaTeX output    : %s\n"   , BOOL_STR(dolatex)     ); pts(vError);
   myp("Use input names : %s\n"   , BOOL_STR(strnames!="")); pts(vError);
   myp("---------------------------------------------\n\n"); pts(vError);
 
@@ -1701,8 +1702,10 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
     for (std::vector<Dataset>::iterator ds = datasets.begin(); ds != datasets.end(); ++ds, ++dsi) {
       TString s_dsnum = "cf_" ; s_dsnum += i;
       double val = 0, tot = 0, rel = 0;
+      int theprecision = precision;
       TString thecut = cut;
-      if ( !ds->getLabel().Contains("Data") ) thecut += lumiweight;
+      if ( !ds->getLabel().Contains("Data") ) thecut      += lumiweight;
+      if (  ds->getLabel().Contains("Data") ) theprecision =          0;
       
 
       if ( !doraw ) {
@@ -1721,27 +1724,25 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
         if ( i != 0 ) rel = val/ds->getSpecial();
         else          rel = 1.0;
       }
+      if ( AreEqualAbs(ds->getSpecial(),0.) ) rel = 0.; //Make relative ratio 0. if there is no stats left in the dataset
       ds->setSpecial(val);
 
       if ( !doraw ) val = val/tot*100;
       if ( dolatex ) {
-        //if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.*f ",dswidths[dsi],precision,val);
-        if ( !doraw ) sprintf(dump,"& %*.*f ",dswidths[dsi],precision,val);
+        if ( !doraw ) sprintf(dump,"& %*.*f ",dswidths[dsi],theprecision,val);
         else { 
-          if ( !relative ) sprintf(dump,"& %*.*f ",dswidths[dsi],precision,val);
-          else sprintf(dump,"& %*.*f (%.*f)",dswidths[dsi],precision,val,precision,rel); 
+          if ( !relative ) sprintf(dump,"& %*.*f ",dswidths[dsi],theprecision,val);
+          else sprintf(dump,"& %*.*f (%.*f)",dswidths[dsi],theprecision,val,precision,rel); 
         }
         if ( ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.0f",dswidths[dsi],val); 
         if ( ds == datasets.end()-1 ) strcat(dump," \\\\");
       }
       else {
-        //if ( !doraw || !(ds->getLabel().Contains("Data")) ) { sprintf(dump,"|%*.*f ",dswidths[dsi],precision,val); cout << "HERE" << endl;}
-        if ( !doraw  ) sprintf(dump,"|%*.*f ",dswidths[dsi],precision,val); 
+        if ( !doraw  ) sprintf(dump,"|%*.*f ",dswidths[dsi],theprecision,val); 
         else { 
-          if ( !relative ) sprintf(dump,"|%*.*f ",dswidths[dsi],precision,val);
-          else sprintf(dump,"|%*.*f (%.*f)",dswidths[dsi],precision,val,precision,rel); 
+          if ( !relative ) sprintf(dump,"|%*.*f ",dswidths[dsi],theprecision,val);
+          else sprintf(dump,"|%*.*f (%.*f)",dswidths[dsi],theprecision,val,precision,rel); 
         }
-        if ( ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.0f",dswidths[dsi],val);
       }
 
       if ( printout ) cout << dump;
@@ -1781,8 +1782,10 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
     for (std::vector<Dataset>::iterator ds = datasets.begin(); ds != datasets.end(); ++ds, ++dsi) {
       TString s_dsnum = "cf_" ; s_dsnum += i;
       double val = 0, tot = 0, rel = 0;
+      int theprecision = precision;
       TString thecut = cut;
-      if ( !ds->getLabel().Contains("Data") ) thecut += lumiweight;
+      if ( !ds->getLabel().Contains("Data") ) thecut      += lumiweight;
+      if (  ds->getLabel().Contains("Data") ) theprecision =          0;
 
       TString totcut = "1"; 
       if ( !ds->getLabel().Contains("Data") ) totcut += lumiweight; //Need to take care of other weights too
@@ -1794,32 +1797,27 @@ void DrawTree::cutflow(TString strcuts, TString strcuts2, TString strweight, TSt
       ///tot=calcTotal2(ds->getTree(),1);
 
       ds->project(varcut+s_dsnum,varcut,thecut,nbins,xlo,xhi,true);
-      ///if ( addoverflow_ ) ds->addOverflow();
       val = ds->getFullEntries();
       //val=calcTotal(ds->getTree(),i+1);
       //val=calcTotal2(ds->getTree(),ds->getLabel(),i+1);
-      //tot = val;
       rel = val/ds->getSpecial();
+      if ( AreEqualAbs(ds->getSpecial(),0.) ) rel = 0.; //Make relative ratio 0. if there is no stats left in the dataset
 
       if ( !doraw ) val = val/tot*100;
       if ( dolatex ) {
-        //if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.*f ",dswidths[dsi],precision,val);
-        if ( !doraw ) sprintf(dump,"& %*.*f ",dswidths[dsi],precision,val);
+        if ( !doraw ) sprintf(dump,"& %*.*f ",dswidths[dsi],theprecision,val);
         else { 
-          if ( !relative ) sprintf(dump,"& %*.*f ",dswidths[dsi],precision,val);
-          else sprintf(dump,"& %*.*f (%.*f)",dswidths[dsi],precision,val,precision,rel); 
+          if ( !relative ) sprintf(dump,"& %*.*f ",dswidths[dsi],theprecision,val);
+          else sprintf(dump,"& %*.*f (%.*f)",dswidths[dsi],theprecision,val,precision,rel); 
         }
-        if ( ds->getLabel().Contains("Data") ) sprintf(dump,"& %*.0f",dswidths[dsi],val); 
         if ( ds == datasets.end()-1 ) strcat(dump," \\\\");
       }
       else {
-        //if ( !doraw || !ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.*f ",dswidths[dsi],precision,val);
-        if ( !doraw  ) sprintf(dump,"|%*.*f ",dswidths[dsi],precision,val); 
+        if ( !doraw  ) sprintf(dump,"|%*.*f ",dswidths[dsi],theprecision,val); 
         else { 
-          if ( !relative ) sprintf(dump,"|%*.*f ",dswidths[dsi],precision,val);
-          else sprintf(dump,"|%*.*f (%.*f)",dswidths[dsi],precision,val,precision,rel); 
+          if ( !relative ) sprintf(dump,"|%*.*f ",dswidths[dsi],theprecision,val);
+          else sprintf(dump,"|%*.*f (%.*f)",dswidths[dsi],theprecision,val,precision,rel); 
         }
-        if ( ds->getLabel().Contains("Data") ) sprintf(dump,"|%*.0f",dswidths[dsi],val);
       }
 
       if ( printout ) cout << dump;
@@ -1915,7 +1913,7 @@ void DrawTree::sens_table(Dataset bg, TString strcuts, TString strweight, TStrin
   myp("Sensitivity Var : %s\n"   , sens.Data()           ); pts(vError); 
   if ( strfile != "" ) { 
   myp("Outputfile      : %s\n"   , strfile.Data()        ); pts(vError); }
-  myp("Latex output    : %s\n"   , BOOL_STR(dolatex)     ); pts(vError);
+  myp("LaTeX output    : %s\n"   , BOOL_STR(dolatex)     ); pts(vError);
   myp("Use input names : %s\n"   , BOOL_STR(strnames!="")); pts(vError);
   myp("---------------------------------------------\n\n"); pts(vError);
 
@@ -2059,9 +2057,7 @@ void DrawTree::sens_table(Dataset bg, TString strcuts, TString strweight, TStrin
     ofs << "\\end{document}\n" ;
   }
 
-  //saveHist(getSaveName3(),"h_");
   if ( savegraph3_ ) fileout_->Write();
-  
 
 }//end sensitivity table code
 

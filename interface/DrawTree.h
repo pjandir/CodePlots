@@ -165,7 +165,7 @@ public:
   void setOutfolder  (TString s) { outfolder_    = s; } 
   void setFilemod    (TString s) { filemod_      = s; } 
   void setFile1ext   (TString s) { file1ext_     = s; } 
-  void setFile2ext   (TString s) { file2ext_     = s; } 
+  void setFile2ext   (TString s) { file2ext_     = s; } // See also the setupNewOutputFile(...) method 
   void setFile2name  (TString s) { file2name_    = s; } 
   void setText       (TString s) { textinside_   = s; } 
   void setExtraText  (TString s) { textinside2_  = s; } 
