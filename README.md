@@ -8,5 +8,4 @@ Using the ROOT framework, this is a drawing tool which will create plots (using 
 
 The user should look at the test directory for example code on how to use it. In addition, the user is encouraged to modify the package in any way necessary. Many functions, particularly in ToPlot, exist to make plotting or printing of info very easy and in some cases automatic. Any bugs or issues should be reported to the owner of this package. 
 
-Please also note no ROOT input files are provided in this package; the user is resposible for the actual data that is meant to be plotted and visualized. Additional information
-on ROOT and CMS can be found here: https://root.cern.ch/ and http://cms.web.cern.ch/, respectively.  
+In the test/ directory, the user can find an example on the usage of this package. Additional information on ROOT and CMS can be found here: https://root.cern.ch/ and http://cms.web.cern.ch/, respectively.  
