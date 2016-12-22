@@ -77,9 +77,9 @@ void Example() {
 
 
   // ~~~~~~~
-  // The plot/analysis options available to user
-  // One can make both plots and tables rather quickly and easily
-  // An overview of both is given    
+  //The plot/analysis options available to user
+  //One can make both plots and tables rather quickly and easily
+  //An overview of both is given    
   
   // === Plots ===   
   //Add (one or more) 'ToPlot' which sets the selection, plotted variable, plot dimensions 
